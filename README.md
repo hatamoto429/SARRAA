@@ -9,7 +9,7 @@
 This system utilizes a trained machine learning model as a middleware to classify (accept or reject) web requests dynamically **before they are passed to the backend**.  
 With the usage of iteratively trained AI, this project aims to enhance the traditional implementations of Web Application Firewalls (WAFs) and Intrusion Detection Systems (IDSs), mitigating common issues associated with dictionary-based filtering and blacklisting. 
 
-Development Start Date: 22.03.2025
+Thesis Start Date: 26.03.2025
 
 ## Technologies Used  
 
