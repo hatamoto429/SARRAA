@@ -27,7 +27,8 @@ export default {
   flex-direction: column;
   align-items: center;
   width: auto;
-  min-width: 400px;
+  min-width: 1000px;
+  min-height: 400px;
   padding: 50px;
   border: 2px solid rgb(75, 31, 92);
   border-radius: 20px;

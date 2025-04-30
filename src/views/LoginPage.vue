@@ -147,7 +147,7 @@ export default {
       });
 
       if (response.data.message === "Login successful") {
-        alert("Login successful!");
+        //alert("Login successful!");
         this.$router.push("/home");
       } else {
         alert("Invalid username or password.");

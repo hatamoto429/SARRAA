@@ -30,6 +30,7 @@ export default {
 
 .info {
   display: flex;
+  font-size: small;
   gap: 250px;
 }
 </style>
