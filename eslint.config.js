@@ -18,6 +18,16 @@ export default defineConfigWithVueTs(
     name: 'app/files-to-ignore',
     ignores: ['**/dist/**', '**/dist-ssr/**', '**/coverage/**'],
   },
+  {
+    'vue/block-lang': [
+      'error',
+      {
+        script: {
+          lang: 'ts',
+        },
+      },
+    ],
+  },
 
   pluginVue.configs['flat/essential'],
   vueTsConfigs.recommended,

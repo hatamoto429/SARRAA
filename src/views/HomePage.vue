@@ -10,6 +10,9 @@
       <router-link to="/" class="redirect-button">
         <h1>Back To Login</h1>
       </router-link>
+      <router-link to="/account" class="account-button">
+        <h1>To Account</h1>
+      </router-link>
 
     </div>
   </div>
@@ -27,13 +30,8 @@ export default {
   flex-direction: column;
   align-items: center;
   width: auto;
-  min-width: 1000px;
-  min-height: 400px;
-  padding: 50px;
-  border: 2px solid rgb(75, 31, 92);
-  border-radius: 20px;
-  background-color: rgba(165, 165, 165, 0.418);
-  transition: transform 0.3s ease;
+  height: auto;
+  padding: 30px;
 }
 
 .home-tab {

@@ -235,11 +235,8 @@ export default {
   flex-direction: column;
   align-items: center;
   width: auto;
-  min-width: 400px;
-  padding: 30px 100px 30px 100px;
-  border: 2px solid #1e1920;
-  border-radius: 20px;
-  background-color: rgba(165, 165, 165, 0.418);
+  height: auto;
+  padding: 30px;
 }
 
 .title {
@@ -257,74 +254,69 @@ export default {
 .input label {
   display: block;
   font-size: 20px;
-  margin-bottom: 5px;
-  margin-left: 2px;
+  margin: 0 0 5px 2px;
 }
 
 .input input {
   font-size: 16px;
   min-width: 200px;
-  background-color: rgb(255, 255, 255);
   padding: 10px;
   border: 2px solid #1e1920;
   border-radius: 7px;
+  background-color: #fff;
 }
 
 .button-container {
   display: flex;
-  flex-direction: row;
   gap: 20px;
-  padding-top: 30px;
-  padding-bottom: 20px;
+  padding: 30px 0 20px;
 }
 
-.button {
-  cursor: pointer;
-  font-size: 16px;
-  padding: 13px;
-  min-width: 140px;
-  border-radius: 25px;
-  background-color: rgb(255, 255, 255);
-  color: rgb(0, 0, 0);
-  transition: transform 0.1s ease-in-out, background-color 0.2s ease-in-out;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 10px;
-}
-
-.button:hover {
-  background-color: #686868;
-  color: rgb(255, 255, 255);
-  transform: scale(1.1);
-}
-
+.button,
 .submit-button {
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  padding: 8px;
   font-size: 16px;
+  background-color: #fff;
+  color: #000;
+  transition: background-color 0.2s ease-in-out, transform 0.1s ease-in-out;
+}
+
+.button {
+  padding: 13px;
+  min-width: 140px;
+  border-radius: 25px;
+  gap: 10px;
+}
+
+.button:hover {
+  background-color: #686868;
+  color: #fff;
+  transform: scale(1.1);
+}
+
+.submit-button {
+  padding: 8px;
   min-width: 40px;
   height: 40px;
   border-radius: 50%;
-  background-color: rgb(255, 255, 255);
-  color: rgb(0, 0, 0);
   transition: transform 1s ease-in-out, background-color 1s ease-in-out, width 1s ease-in-out;
   white-space: nowrap;
-}
-
-.submit-button .submit-text {
-  text-align: center;
-  font-weight: bold;
-  display: none;
-  padding: 5px;
+  align-items: right;
 }
 
 .submit-button:hover {
   width: auto;
   border-radius: 25px;
+}
+
+.submit-button .submit-text {
+  display: none;
+  padding: 5px;
+  font-weight: bold;
+  text-align: center;
 }
 
 .submit-button:hover .submit-text {
@@ -334,9 +326,7 @@ export default {
 .submit-button .arrow {
   width: 20px;
   height: 20px;
-  background-image: url('@/assets/icons/right-arrow.png');
-  background-size: contain;
-  background-repeat: no-repeat;
+  background: url('@/assets/icons/right-arrow.png') no-repeat center/contain;
   transition: transform 1s ease-in-out;
 }
 
@@ -346,7 +336,7 @@ export default {
 
 .active {
   background-color: #fa8e04;
-  color: white;
+  color: #fff;
   font-weight: bold;
 }
 </style>

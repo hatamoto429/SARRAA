@@ -20,7 +20,6 @@ export default {
   justify-content: center;
   background-color: rgba(165, 165, 165, 0.418);
   border-top: 2px solid #1e1920;
-  padding: 10px;
   position: fixed;
   bottom: 0;
   left: 0;
@@ -30,7 +29,7 @@ export default {
 
 .info {
   display: flex;
-  font-size: small;
+  font-size: 15px;
   gap: 250px;
 }
 </style>

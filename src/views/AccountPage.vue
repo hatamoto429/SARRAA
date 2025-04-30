@@ -77,12 +77,8 @@ export default {
   flex-direction: column;
   align-items: center;
   width: auto;
-  min-width: 400px;
-  padding: 50px;
-  border: 2px solid rgb(75, 31, 92);
-  border-radius: 20px;
-  background-color: rgba(165, 165, 165, 0.418);
-  transition: transform 0.3s ease;
+  height: auto;
+  padding: 30px;
 }
 
 .account-tab {
