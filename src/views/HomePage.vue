@@ -1,64 +1,119 @@
 <template>
   <div class="home-container">
+    <!-- Loading Spinner Simulation -->
+    <div v-if="loading" class="loading-spinner">
+      <div class="spinner"></div>
+    </div>
 
-    <!-- Title -->
-    <h1 class="message">Congratulations, you are in!</h1>
-
-    <div class="home-tab">
-
-      <!-- Return Button-->
-      <router-link to="/" class="redirect-button">
-        <h1>Back To Login</h1>
-      </router-link>
-      <router-link to="/account" class="account-button">
-        <h1>To Account</h1>
-      </router-link>
-
+    <!-- Home Tab Content -->
+    <div v-else class="home-tab">
+      <div>
+        <NavBar />
+      </div>
+      <div id="product-list">
+        <SlotComponent v-for="x in products" :key="x.name">
+          <img :src="x.img" alt="product image" />
+          <h1 class="product-title">{{ x.name }} </h1>
+        </SlotComponent>
+      </div>
     </div>
   </div>
 </template>
 
 <script>
+import SlotComp from '@/components/common/ProductCard.vue'
+import NavBar from '@/components/common/NavBar.vue'
+import HeadphonesImg from '@/assets/products/Headphones.png'
+
 export default {
+  components: {
+    'SlotComponent': SlotComp,
+    'NavBar': NavBar
+  },
   name: "HomePage",
+  data() {
+    return {
+      loading: true,
+      products: [
+        { name: 'Phone', img: HeadphonesImg },
+        { name: 'Laptop', img: HeadphonesImg },
+        { name: 'Headphones', img: HeadphonesImg },
+        { name: 'Tablet', img: HeadphonesImg },
+        { name: 'Camera', img: HeadphonesImg },
+        { name: 'TV', img: HeadphonesImg },
+        { name: 'Charger', img: HeadphonesImg },
+        { name: 'Gift Card', img: HeadphonesImg }
+      ]
+    }
+  },
+  mounted() {
+    setTimeout(() => {
+      this.loading = false;
+    }, 700);
+  }
 };
 </script>
 
-<style>
+<style scoped>
 .home-container {
   display: flex;
   flex-direction: column;
   align-items: center;
-  width: auto;
-  height: auto;
-  padding: 30px;
+  width: 95vw;
+  height: 33vw;
+  border-radius: 10px;
+  overflow: hidden;
 }
 
 .home-tab {
+  /* border: 2px solid black; */
+  flex: 1;
+}
+
+#product-list {
   display: flex;
-  flex-direction: column;
+  flex-wrap: wrap;
+  justify-content: space-around;
+  gap: 20px;
+  height: 29vw;
+  overflow-y: auto;
+}
+
+#product-list img {
+  display: block;
+  margin: 5% auto 0;
+  width: 50%;
+}
+
+.product-title {
+  text-align: center;
+  color: black;
+}
+
+.loading-spinner {
+  display: flex;
+  justify-content: center;
   align-items: center;
-  width: auto;
+  height: 100vh;
+  width: 100%;
 }
 
-.error {
-  text-align: center;
-  font-size: 45px;
+.spinner {
+  border: 4px solid #f3f3f3;
+  border-top: 4px solid #871a79;
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  animation: spin 0.7s linear infinite;
 }
 
-.message {
-  text-align: center;
-}
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
 
-.redirect-button {
-  color: rgb(0, 0, 0);
-  padding: 20px;
-  font-size: 12px;
-  font-weight: bold;
-  transition: font-size 0.3s ease;
-}
-
-.redirect-button:hover {
-  transform: scale(1.2);
+  100% {
+    transform: rotate(360deg);
+  }
 }
 </style>

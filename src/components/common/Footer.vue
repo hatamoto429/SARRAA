@@ -29,7 +29,7 @@ export default {
 
 .info {
   display: flex;
-  font-size: 15px;
-  gap: 250px;
+  font-size: 14px;
+  gap: 200px;
 }
 </style>

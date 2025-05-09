@@ -26,6 +26,9 @@
       <router-link to="/" class="redirect-button">
         <h1>Back To Login</h1>
       </router-link>
+      <router-link to="/home" class="redirect-button">
+        <h1>Back To Home</h1>
+      </router-link>
     </div>
 
   </div>

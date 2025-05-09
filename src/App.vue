@@ -25,7 +25,6 @@
 </template>
 
 <script>
-import { RouterLink } from 'vue-router';
 import Background from './components/common/Background.vue'
 import Footer from './components/common/Footer.vue'
 
@@ -70,7 +69,6 @@ html {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding-top: 40px;
   position: relative;
 }
 
@@ -79,8 +77,10 @@ html {
   z-index: 1000;
   align-items: center;
   flex-direction: row;
-  height: 170px;
+  height: 160px;
   width: auto;
+  padding-top: 20px;
+  padding-bottom: 40px;
 }
 
 .logo {
@@ -93,7 +93,7 @@ html {
 
 .logo-moved {
   transform: translateX(-40vw) rotate(360deg);
-  width: 100px;
+  width: 70px;
 }
 
 .app-title {
@@ -106,7 +106,7 @@ html {
 }
 
 .main-container {
-  padding-top: 40px;
+  padding: 10px;
 }
 
 .content {
@@ -114,8 +114,8 @@ html {
   flex-direction: column;
   align-items: center;
   border: 2px solid rgb(255, 255, 255);
-  border-radius: 20px;
-  background-color: rgba(165, 165, 165, 0.418);
+  border-radius: 15px;
+  background-color: #3b39368e;
   transition: width 0.8s ease-in-out, height 0.5s ease-in-out;
   width: 550px;
   height: 550px;
@@ -123,6 +123,6 @@ html {
 
 .content-scaled {
   width: 95vw;
-  height: 30vw;
+  height: 33vw;
 }
 </style>
