@@ -35,7 +35,7 @@
 </template>
 
 <script>
-import { fetchUserData } from '@/utils';
+import { fetchUserData } from '@/utils/utils';
 
 export default {
   name: "AccountPage",
