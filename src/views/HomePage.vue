@@ -23,7 +23,7 @@
 <script>
 import SlotComp from '@/components/common/ProductCard.vue'
 import NavBar from '@/components/common/NavBar.vue'
-import HeadphonesImg from '@/assets/products/Headphones.png'
+import HeadphonesImg from '@/assets/product_img/Headphones.png'
 
 export default {
   components: {

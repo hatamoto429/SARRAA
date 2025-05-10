@@ -326,7 +326,7 @@ export default {
 .submit-button .arrow {
   width: 20px;
   height: 20px;
-  background: url('@/assets/icons/right-arrow.png') no-repeat center/contain;
+  background: url('@/assets/icons/Arrow_Right.png') no-repeat center/contain;
   transition: transform 1s ease-in-out;
 }
 
