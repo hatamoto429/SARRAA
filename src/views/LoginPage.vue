@@ -103,6 +103,8 @@ export default {
         const username = this.currentUsername;
         const password = this.currentPassword;
 
+
+        /*
         // TODO: If necessary - transform now manual checks, on submit button, into automated execution on content changes
 
         // Model - Check username and password [SQLi, XSS]
@@ -125,6 +127,7 @@ export default {
           alert("Suspicious dynamic content detected!");
           return;
         }
+        */
 
         // Proceed with Login / Registration after all checks passed
         if (this.isUser) {
@@ -141,29 +144,54 @@ export default {
 
     //Login
     async handleLogin() {
-      const response = await axios.post("http://localhost:5002/login", {
-        username: this.username,
-        password: this.password,
-      });
+      try {
+        const response = await axios.post("http://localhost:5002/api/login", {
+          username: this.username,
+          password: this.password,
+        });
 
-      if (response.data.message === "Login successful") {
-        //alert("Login successful!");
-        this.$router.push("/home");
-      } else {
-        alert("Invalid username or password.");
+        // If status 200 and response.data has user info (like username), consider it successful
+        if (response.status === 200 && response.data && response.data.username) {
+          alert("Login successful!");
+          this.$router.push("/home");
+        } else {
+          alert("Invalid username or password.");
+        }
+      } catch (error) {
+        if (error.response && error.response.status === 401) {
+          alert("Invalid username or password.");
+        } else {
+          alert("An unexpected error occurred.");
+          console.error(error);
+        }
       }
     },
 
     //Registering
     async handleRegister() {
-      await axios.post("http://localhost:5002/register", {
-        username: this.choose_username,
-        password: this.choose_password,
-      });
-      alert("Registration successful! Please log in.");
-      this.toggleAuthMode(true);
+      try {
+
+        // Plain Register
+        await axios.post("http://localhost:5002/api/registerplain", {
+          username: this.choose_username,
+          password: this.choose_password,
+        });
+
+        // Hashed Register
+        // await axios.post("http://localhost:5002/api/registerhashed", {
+        //   username: this.choose_username,
+        //   password: this.choose_password,
+        // });
+
+        alert("Registration successful! Please log in.");
+        this.toggleAuthMode(true);
+      } catch (error) {
+        console.error("Registration failed:", error.response?.data || error.message);
+        alert(error.response?.data?.message || "Registration failed.");
+      }
     },
 
+    /*
     // Model check for SQLi and XSS attacks on username and password
     async checkSQLiXSS(username, password) {
       //TESTING, debug
@@ -225,6 +253,7 @@ export default {
         return 'safe';
       }
     },
+    */
   }
 };
 </script>
