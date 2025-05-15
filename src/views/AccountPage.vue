@@ -4,6 +4,7 @@
     <!-- Title -->
     <h1 class="message">Manage Your Account</h1>
 
+    <!-- User Info -->
     <div class="info">
       <div class="user-info">
         <h1 class="username">{{ username }}</h1>

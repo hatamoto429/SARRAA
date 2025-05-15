@@ -1,5 +1,6 @@
 <template>
   <div class="home-container">
+
     <!-- Loading Spinner Simulation -->
     <div v-if="loading" class="loading-spinner">
       <div class="spinner"></div>

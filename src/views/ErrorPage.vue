@@ -2,8 +2,8 @@
   <div class="error-container">
     <div class="error-tab">
 
+      <!-- Error Message -->
       <h1 class="error">⚡ Error 404 ⚡</h1>
-
       <h1 class="message">This Page Does Not Exist <br> :&#40;</h1>
 
       <router-link to="/" class="redirect-button">

@@ -3,24 +3,23 @@
 
     <!-- Title -->
     <h1 class="title" v-html="titleText"></h1>
-
     <div class="login-tab">
 
       <!-- Authentication Form -->
       <form @submit.prevent="handleAuth" class="auth-form">
         <div class="input">
-          <label :for="isUser ? 'username' : 'choose_username'">
-            {{ isUser ? 'Username' : 'Your Username' }}
+          <label :for="isLoginMode ? 'username' : 'choose_username'">
+            {{ isLoginMode ? 'Username' : 'Your Username' }}
           </label>
-          <input type="text" :id="isUser ? 'username' : 'choose_username'" v-model="currentUsername" required
-            :placeholder="isUser ? 'Enter your username' : 'Choose your username'" />
+          <input type="text" :id="isLoginMode ? 'username' : 'choose_username'" v-model="currentUsername" required
+            :placeholder="isLoginMode ? 'Enter your username' : 'Choose your username'" />
         </div>
         <div class="input">
-          <label :for="isUser ? 'password' : 'choose_password'">
-            {{ isUser ? 'Password' : 'Your Password' }}
+          <label :for="isLoginMode ? 'password' : 'choose_password'">
+            {{ isLoginMode ? 'Password' : 'Your Password' }}
           </label>
-          <input type="password" :id="isUser ? 'password' : 'choose_password'" v-model="currentPassword" required
-            :placeholder="isUser ? 'Enter your password' : 'Choose your password'" />
+          <input type="password" :id="isLoginMode ? 'password' : 'choose_password'" v-model="currentPassword" required
+            :placeholder="isLoginMode ? 'Enter your password' : 'Choose your password'" />
         </div>
 
         <!-- Submit Input Button -->
@@ -29,13 +28,13 @@
           <span class="submit-text">Proceed</span>
         </button>
       </form>
-
     </div>
 
     <!-- Authentication Switch -->
     <div class="button-container">
-      <button :class="{ 'active': isUser }" @click="toggleAuthMode(true)" type="button" class="button">Login</button>
-      <button :class="{ 'active': !isUser }" @click="toggleAuthMode(false)" type="button"
+      <button :class="{ 'active': isLoginMode }" @click="toggleAuthMode(true)" type="button"
+        class="button">Login</button>
+      <button :class="{ 'active': !isLoginMode }" @click="toggleAuthMode(false)" type="button"
         class="button">Register</button>
     </div>
 
@@ -45,12 +44,13 @@
 <script>
 import axios from "axios";
 import useUserStore from "@/store/user.js"
+import securityChecks from "@/utils/sarraaCheck.js";
 
 export default {
   name: "LoginPage",
   data() {
     return {
-      isUser: true,
+      isLoginMode: true,
       username: "",
       password: "",
       choose_username: "",
@@ -59,16 +59,16 @@ export default {
   },
   computed: {
     titleText() {
-      return this.isUser
+      return this.isLoginMode
         ? "Good To See You Again,<br>Please Login!"
         : "Welcome New User,<br>Please Enter Your Details!";
     },
     currentUsername: {
       get() {
-        return this.isUser ? this.username : this.choose_username;
+        return this.isLoginMode ? this.username : this.choose_username;
       },
       set(value) {
-        if (this.isUser) {
+        if (this.isLoginMode) {
           this.username = value;
         } else {
           this.choose_username = value;
@@ -77,10 +77,10 @@ export default {
     },
     currentPassword: {
       get() {
-        return this.isUser ? this.password : this.choose_password;
+        return this.isLoginMode ? this.password : this.choose_password;
       },
       set(value) {
-        if (this.isUser) {
+        if (this.isLoginMode) {
           this.password = value;
         } else {
           this.choose_password = value;
@@ -90,58 +90,38 @@ export default {
   },
   methods: {
     toggleAuthMode(isLogin) {
-      this.isUser = isLogin;
+      this.isLoginMode = isLogin;
     },
 
     // Authentication Submit
     async handleAuth() {
-      if (!this.isUser ? !this.choose_username || !this.choose_password : !this.username || !this.password) {
+      const username = this.currentUsername;
+      const password = this.currentPassword;
+
+      if (!username || !password) {
         alert("Please fill out all fields!");
         return;
       }
 
+      // SARRAA Checking Block, Manually Executed on handleAuth call (Proceed Button Press)
       try {
-        const username = this.currentUsername;
-        const password = this.currentPassword;
+        const inputCheck = await securityChecks.checkUserInput({ username, password });
+        const urlCheck = await securityChecks.checkUrlParams(this.$route.query);
+        const dynamicCheck = await securityChecks.checkDynamicContent(username + password);
 
-
-        /*
-        // TODO: If necessary - transform now manual checks, on submit button, into automated execution on content changes
-
-        // Model - Check username and password [SQLi, XSS]
-        const usernameCheck = await this.checkSQLiXSS(username, password);
-        if (usernameCheck === 'malicious') {
-          alert("Malicious username or password detected!");
+        if ([inputCheck, urlCheck, dynamicCheck].includes("malicious")) {
+          alert("Security warning: Malicious input detected.");
           return;
         }
 
-        // Model - Check URL parameters [SLQi, XSS]
-        const urlParamsCheck = await this.checkURLParams();
-        if (urlParamsCheck === 'malicious') {
-          alert("Suspicious URL parameters detected!");
-          return;
-        }
-
-        // Model - Check dynamic content injection [SLQi, XSS]
-        const dynamicContentCheck = await this.checkDynamicContent();
-        if (dynamicContentCheck === 'malicious') {
-          alert("Suspicious dynamic content detected!");
-          return;
-        }
-        */
-
-        // Proceed with Login / Registration after all checks passed
-        if (this.isUser) {
-          await this.handleLogin();
-        } else {
-          await this.handleRegister();
-        }
+        this.isLoginMode ? await this.handleLogin() : await this.handleRegister();
 
       } catch (error) {
-        console.error("Error:", error);
-        alert("An error occurred.");
+        console.error("Security check failed:", error);
+        alert("An unexpected error occurred during validation.");
       }
     },
+
 
     //Login
     async handleLogin() {
@@ -197,70 +177,6 @@ export default {
         alert(error.response?.data?.message || "Registration failed.");
       }
     },
-
-    /*
-    // Model check for SQLi and XSS attacks on username and password
-    async checkSQLiXSS(username, password) {
-      //TESTING, debug
-      console.log("_____________start_____________");
-      console.log("| Checking User Entered Content:");
-      console.log("| Username:", username);
-      console.log("| Password:", password);
-      console.log("______________end______________");
-      try {
-        // Commented required behavior for payload data testing
-        // const response = await axios.post("http://ml-server/check-sqli-xss", { username, password });
-        // return response.data.status; // 'safe' or 'malicious'
-
-        return 'safe'; // Simulated response
-      } catch (error) {
-        console.error("Error checking for Entered Content", error);
-        return 'safe';
-      }
-    },
-
-    // Model check for malicious URL parameters
-    async checkURLParams() {
-      const queryParams = this.$route.query;
-      //TESTING, debug
-      console.log("_____________start_____________");
-      console.log("| Checking URL Parameters:");
-      console.log("| ", queryParams);
-      console.log("______________end______________");
-
-      try {
-        // Commented required behavior for payload data testing
-        // const response = await axios.post("http://ml-server/check-url-params", queryParams);
-        // return response.data.status; // 'safe' or 'malicious'
-
-        return 'safe'; // Simulated response
-      } catch (error) {
-        console.error("Error checking URL Parameters:", error);
-        return 'safe';
-      }
-    },
-
-    // Model check for dynamic content injection
-    async checkDynamicContent() {
-      const dynamicContent = this.currentUsername + this.currentPassword;
-      //TESTING, debug
-      console.log("_____________start_____________");
-      console.log("| Checking Dynamic Content:");
-      console.log("| Credentials:", dynamicContent);
-      console.log("______________end______________");
-
-      try {
-        // Commented required behavior for payload data testing
-        // const response = await axios.post("http://ml-server/check-dynamic-content", { content: dynamicContent });
-        // return response.data.status; // 'safe' or 'malicious'
-
-        return 'safe'; // Simulated response
-      } catch (error) {
-        console.error("Error checking Dynamic Content:", error);
-        return 'safe';
-      }
-    },
-    */
   }
 };
 </script>
@@ -340,7 +256,6 @@ export default {
   border-radius: 50%;
   transition: transform 1s ease-in-out, background-color 1s ease-in-out, width 1s ease-in-out;
   white-space: nowrap;
-  align-items: right;
 }
 
 .submit-button:hover {
