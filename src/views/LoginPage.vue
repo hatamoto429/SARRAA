@@ -44,6 +44,7 @@
 
 <script>
 import axios from "axios";
+import useUserStore from "@/store/user.js"
 
 export default {
   name: "LoginPage",
@@ -144,6 +145,8 @@ export default {
 
     //Login
     async handleLogin() {
+      const userStore = useUserStore();
+
       try {
         const response = await axios.post("http://localhost:5002/api/login", {
           username: this.username,
@@ -153,6 +156,10 @@ export default {
         // If status 200 and response.data has user info (like username), consider it successful
         if (response.status === 200 && response.data && response.data.username) {
           alert("Login successful!");
+
+          // Save credentials in global Pinia store - TESTING ONLY
+          userStore.setCredentials(this.username, this.password)
+
           this.$router.push("/home");
         } else {
           alert("Invalid username or password.");
