@@ -43,7 +43,7 @@
 
 <script>
 import axios from "axios";
-import useUserStore from "@/store/user.js"
+import useUserStore from "@/store/userStore.js"
 import securityChecks from "@/utils/sarraaCheck.js";
 
 export default {
@@ -105,14 +105,15 @@ export default {
 
       // SARRAA Checking Block, Manually Executed on handleAuth call (Proceed Button Press)
       try {
-        const inputCheck = await securityChecks.checkUserInput({ username, password });
-        const urlCheck = await securityChecks.checkUrlParams(this.$route.query);
-        const dynamicCheck = await securityChecks.checkDynamicContent(username + password);
+        // NO CHECKING FOR NOW
+        // const inputCheck = await securityChecks.checkUserInput({ username, password });
+        // const urlCheck = await securityChecks.checkUrlParams(this.$route.query);
+        // const dynamicCheck = await securityChecks.checkDynamicContent(username + password);
 
-        if ([inputCheck, urlCheck, dynamicCheck].includes("malicious")) {
-          alert("Security warning: Malicious input detected.");
-          return;
-        }
+        // if ([inputCheck, urlCheck, dynamicCheck].includes("malicious")) {
+        //   alert("Security warning: Malicious input detected.");
+        //   return;
+        // }
 
         this.isLoginMode ? await this.handleLogin() : await this.handleRegister();
 

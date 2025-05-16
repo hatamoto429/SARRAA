@@ -1,4 +1,4 @@
-import { findUserByUsername, createUser } from '../models/userModel.js'
+import { getUserProfile, createUser } from '../models/userModel.js'
 import { compare, genSalt, hash } from 'bcryptjs'
 import { checkIfUsernameExists } from '../utils/dbutils.js'
 import { db } from '../connect.js'
@@ -6,7 +6,7 @@ import { db } from '../connect.js'
 export const loginUser = (req, res) => {
   const { username, password } = req.body
 
-  findUserByUsername(username, async (err, results) => {
+  getUserProfile(username, async (err, results) => {
     if (err) return res.status(500).json({ message: 'DB error' })
 
     if (results.length > 0) {
