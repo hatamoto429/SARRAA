@@ -1,0 +1,19 @@
+# Ignore PyCharm project settings
+.idea/
+
+# Ignore Python virtual environment
+venv/
+
+# Ignore Python cache files
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Ignore model files (optional, if you save trained models locally)
+*.pkl
+*.joblib
+models/
+
+# Ignore data (optional)
+data/
