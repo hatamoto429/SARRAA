@@ -8,9 +8,13 @@ import joblib
 #df_raw = pd.read_csv("datasets/XSS.csv", header=None, quoting=3, encoding='utf-8', on_bad_lines='skip')
 #print(df_raw.head(10))
 
+# 12629 valid reads with XSS.csv
+# 0 valid reads with broken xss
+# 0 valid reads with valid xss
+
 # Load raw text dataset with columns: 'text' and 'label'
 df = pd.read_csv(
-    "datasets/XSS.csv",
+    "datasets/XSS_valid_rows.csv",
     names=["text", "label"],
     encoding="utf-8",
     on_bad_lines="skip",

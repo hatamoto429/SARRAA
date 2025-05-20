@@ -7,27 +7,37 @@ from sklearn.metrics import classification_report
 import joblib
 
 bad_rows = []
+good_rows = []
 
-# 13686 - 12623 = 1.063 BAD ROWS
+#With XSS.csv
+# 12741 valid reads with xss, 941 broken saved
 
-with open("datasets/XSS.csv", encoding="utf-8") as file:
+#With XSS_fixed.csv
+# 13676 valid rows with xss new, 6 broken saved
+
+# cleaned broken
+with open("datasets/XSS_fixed.csv", encoding="utf-8") as file:
     reader = csv.reader(file)
     for i, row in enumerate(reader, start=1):
         if len(row) != 2:
             bad_rows.append((i, row))
+        else:
+            good_rows.append(row)
 
 # Save bad rows to a new CSV
-with open("datasets/broken_XSS_rows.csv", "w", newline='', encoding="utf-8") as out_file:
+with open("datasets/tmp_broken.csv", "w", newline='', encoding="utf-8") as out_file:
     writer = csv.writer(out_file)
-    writer.writerow(["line_number", "content"])
-    for i, row in bad_rows:
-        writer.writerow([i, ','.join(row)])
+    writer.writerow(bad_rows)
 
-print(f" Found {len(bad_rows)} malformed rows. Saved to 'datasets/broken_XSS_rows.csv'")
-if bad_rows:
-    print("Last 10 malformed rows:")
-    for i, row in bad_rows[-10:]:
-        print(f"Row {i}: {row}")
+    print(f"Saved {len(bad_rows)} bad rows to 'datasets/tmp_broken.csv'")
+
+# ✅ Save valid rows to a new CSV
+with open("datasets/tmp_valid.csv", "w", newline='', encoding="utf-8") as valid_file:
+    writer = csv.writer(valid_file)
+    writer.writerows(good_rows)
+
+print(f"Saved {len(good_rows)} valid rows to 'datasets/tmp_valid.csv'")
+
 
 # Load Valid Data
 df_raw = pd.read_csv("datasets/XSS.csv", header=None, quoting=3, encoding='utf-8', on_bad_lines='skip')
