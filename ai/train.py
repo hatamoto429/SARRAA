@@ -5,91 +5,94 @@ from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.metrics import classification_report
 import joblib
+import os
 
-bad_rows = []
-good_rows = []
-
-#With XSS.csv
+# With XSS.csv
 # 12741 valid reads with xss, 941 broken saved
 
-#With XSS_fixed.csv
+# With XSS_fixed.csv
 # 13676 valid rows with xss new, 6 broken saved
 
-# cleaned broken
-with open("datasets/XSS_fixed.csv", encoding="utf-8") as file:
+# === STEP 1: CLEAN AND LOAD DATA ===
+
+INPUT_CSV = "datasets/XSS_fixed.csv"
+VALID_CSV = "datasets/tmp_valid.csv"
+BROKEN_CSV = "datasets/tmp_broken.csv"
+MODEL_DIR = "models"
+
+# Ensure model directory exists
+os.makedirs(MODEL_DIR, exist_ok=True)
+
+# Clean input file and separate valid/broken rows
+good_rows, bad_rows = [], []
+with open(INPUT_CSV, encoding="utf-8") as file:
     reader = csv.reader(file)
     for i, row in enumerate(reader, start=1):
-        if len(row) != 2:
-            bad_rows.append((i, row))
-        else:
+        if len(row) == 2:
             good_rows.append(row)
+        else:
+            bad_rows.append((i, row))
 
-# Save bad rows to a new CSV
-with open("datasets/tmp_broken.csv", "w", newline='', encoding="utf-8") as out_file:
-    writer = csv.writer(out_file)
-    writer.writerow(bad_rows)
-
-    print(f"Saved {len(bad_rows)} bad rows to 'datasets/tmp_broken.csv'")
-
-# ✅ Save valid rows to a new CSV
-with open("datasets/tmp_valid.csv", "w", newline='', encoding="utf-8") as valid_file:
-    writer = csv.writer(valid_file)
+# Save valid and broken rows
+with open(VALID_CSV, "w", newline='', encoding="utf-8") as vf:
+    writer = csv.writer(vf)
     writer.writerows(good_rows)
 
-print(f"Saved {len(good_rows)} valid rows to 'datasets/tmp_valid.csv'")
+with open(BROKEN_CSV, "w", newline='', encoding="utf-8") as bf:
+    writer = csv.writer(bf)
+    writer.writerow(["line_number", "data"])
+    writer.writerows(bad_rows)
 
+# Save cleaned script for further processing
+print(f"Saved {len(good_rows)} valid rows to '{VALID_CSV}'")
+print(f"Saved {len(bad_rows)} broken rows to '{BROKEN_CSV}'")
 
-# Load Valid Data
-df_raw = pd.read_csv("datasets/XSS.csv", header=None, quoting=3, encoding='utf-8', on_bad_lines='skip')
-print(df_raw.head(10))
-
-# Load dataset with column names
+# Load cleaned valid data
 df = pd.read_csv(
-    "datasets/XSS.csv",
+    VALID_CSV,
     names=["text", "label"],
     encoding="utf-8"
 )
 
-# Drop rows where any value is missing (NaN)
-df.dropna(inplace=True)
+# === STEP 2: PREPROCESS ===
 
-# Ensure 'text' column has no missing values
-df['text'] = df['text'].fillna('')
+df.dropna(inplace=True)  # Drop any remaining NaNs
+df["label"] = df["label"].astype(int)  # Ensure labels are integers
 
-# Convert label column to integer type
-df['label'] = df['label'].astype(int)
-
-# Optional: Check dataset size and class balance
-print(f"\n Dataset size after cleanup: {len(df)}")
+print(f"\nDataset size after cleanup: {len(df)}")
 print("Class distribution:")
-print(df['label'].value_counts())
+print(df["label"].value_counts())
 
-# Split data into train and test sets (80% train, 20% test)
+# === STEP 3: TRAIN/TEST SPLIT ===
+
 X_train, X_test, y_train, y_test = train_test_split(
-    df['text'], df['label'], test_size=0.2, random_state=42
+    df["text"], df["label"], test_size=0.2, random_state=42
 )
 
-# Initialize TF-IDF vectorizer
+# === STEP 4: VECTORIZE TEXT ===
+
 vectorizer = TfidfVectorizer(
-    lowercase=False,           # Keep original casing
+    lowercase=False,           # Retain original casing
     token_pattern=r'\S+'       # Tokenize on non-whitespace substrings
 )
 
-# Vectorize training and test data
 X_train_vec = vectorizer.fit_transform(X_train)
 X_test_vec = vectorizer.transform(X_test)
 
-# Initialize and train Random Forest classifier
+# === STEP 5: TRAIN MODEL ===
+
 clf = RandomForestClassifier(random_state=42)
 clf.fit(X_train_vec, y_train)
 
-# Evaluate on test data
+# === STEP 6: EVALUATE ===
+
 y_pred = clf.predict(X_test_vec)
 print("\nClassification Report:")
 print(classification_report(y_test, y_pred))
 
-# Save vectorizer and model
-joblib.dump(vectorizer, "models/vectorizer.joblib")
-joblib.dump(clf, "models/model.joblib")
+# === STEP 7: SAVE MODEL ===
 
-print("Model and vectorizer trained and saved.")
+joblib.dump(vectorizer, os.path.join(MODEL_DIR, "vectorizer.joblib"))
+joblib.dump(clf, os.path.join(MODEL_DIR, "model.joblib"))
+
+print("✅ Model and vectorizer trained and saved to 'models/'")
