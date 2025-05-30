@@ -1,5 +1,5 @@
 import { genSalt, hash, compare } from 'bcryptjs'
-import { db } from '../connect.js'
+import { db } from '../connectdb.js'
 
 export const hashPassword = async (password) => {
   const salt = await genSalt(10)

@@ -1,4 +1,5 @@
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 import joblib
 import os
@@ -8,6 +9,14 @@ vectorizer = joblib.load("models/vectorizer.joblib")
 
 app = FastAPI()
 
+# CORS Middleware to enable Vue frontend communication with FastAPI
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  # Local Host URL - http://localhost:5173/
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 class InputText(BaseModel):
     text: str
@@ -28,3 +37,10 @@ def predict(input_data: InputText):
         "prediction": label,
         "class": int(prediction)
     }
+
+
+# VM Pentesting hosting
+# python -m uvicorn app_fastapi:app --reload --host 0.0.0.0 --port 8001
+
+# Local Machine hosting
+# python -m uvicorn app_fastapi:app --reload --port 8001

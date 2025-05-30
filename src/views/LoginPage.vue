@@ -104,17 +104,25 @@ export default {
       }
 
       // SARRAA Checking Block, Manually Executed on handleAuth call (Proceed Button Press)
+      // ML Classification using FastAPI
       try {
-        // NO CHECKING FOR NOW
-        // const inputCheck = await securityChecks.checkUserInput({ username, password });
-        // const urlCheck = await securityChecks.checkUrlParams(this.$route.query);
-        // const dynamicCheck = await securityChecks.checkDynamicContent(username + password);
+        console.log()
+        const predictionRes = await axios.post("http://127.0.0.1:8001/predict", {
+          text: username,
+        }, {
+          headers: {
+            "Content-Type": "application/json"
+          }
+        });
 
-        // if ([inputCheck, urlCheck, dynamicCheck].includes("malicious")) {
-        //   alert("Security warning: Malicious input detected.");
-        //   return;
-        // }
+        const prediction = predictionRes.data.prediction;
 
+        if (prediction === "malicious") {
+          alert("Security Warning: Malicious username detected.");
+          return;
+        }
+
+        // Proceed with login / register
         this.isLoginMode ? await this.handleLogin() : await this.handleRegister();
 
       } catch (error) {

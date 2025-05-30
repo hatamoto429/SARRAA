@@ -1,7 +1,7 @@
 import { getUserProfile, createUser } from '../models/userModel.js'
 import { compare, genSalt, hash } from 'bcryptjs'
 import { checkIfUsernameExists } from '../utils/dbutils.js'
-import { db } from '../connect.js'
+import { db } from '../connectdb.js'
 
 export const loginUser = (req, res) => {
   const { username, password } = req.body

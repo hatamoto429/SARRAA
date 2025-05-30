@@ -1,4 +1,4 @@
-import { db } from '../connect.js'
+import { db } from '../connectdb.js'
 
 export const getUserProfile = (username, callback) => {
   const query = 'SELECT * FROM users WHERE username = ?'
