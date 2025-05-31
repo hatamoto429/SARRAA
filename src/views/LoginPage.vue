@@ -44,7 +44,7 @@
 <script>
 import axios from "axios";
 import useUserStore from "@/store/userStore.js"
-import securityChecks from "@/utils/sarraaCheck.js";
+import checkDynamicContent from "@/utils/sarraaCheck.js"
 
 export default {
   name: "LoginPage",
@@ -93,6 +93,7 @@ export default {
       this.isLoginMode = isLogin;
     },
 
+    // EXTRACT HANDLE AUTH IN FRONTEND UTILS
     // Authentication Submit
     async handleAuth() {
       const username = this.currentUsername;
@@ -103,26 +104,16 @@ export default {
         return;
       }
 
-      // SARRAA Checking Block, Manually Executed on handleAuth call (Proceed Button Press)
-      // ML Classification using FastAPI
+      // SARRAA Check Block, Manually Executed on handleAuth call (Proceed Button Press)
+      // ML Classification using FastAPI hosted on endpoint http://127.0.0.1:8001
       try {
-        console.log()
-        const predictionRes = await axios.post("http://127.0.0.1:8001/predict", {
-          text: username,
-        }, {
-          headers: {
-            "Content-Type": "application/json"
-          }
-        });
-
-        const prediction = predictionRes.data.prediction;
+        const prediction = await checkDynamicContent(username);
 
         if (prediction === "malicious") {
           alert("Security Warning: Malicious username detected.");
           return;
         }
 
-        // Proceed with login / register
         this.isLoginMode ? await this.handleLogin() : await this.handleRegister();
 
       } catch (error) {
@@ -146,7 +137,8 @@ export default {
         if (response.status === 200 && response.data && response.data.username) {
           alert("Login successful!");
 
-          // Save credentials in global Pinia store - TESTING ONLY
+          // TESTING ONLY
+          // Save credentials in global Pinia store
           userStore.setCredentials(this.username, this.password)
 
           this.$router.push("/home");
