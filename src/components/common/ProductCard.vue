@@ -1,22 +1,30 @@
 <template>
-  <div class="container">
-    <div class="flip-wrapper">
-      <div class="flip-card">
-        <div class="slot-box">
-          <slot></slot>
+  <router-link :to="`/product/${name}`" class="product-card">
+    <div class="container">
+      <div class="flip-wrapper">
+        <div class="flip-card">
+          <div class="slot-box">
+            <slot></slot>
+          </div>
         </div>
       </div>
     </div>
-  </div>
+  </router-link>
 </template>
 
 <script>
 export default {
-  name: "StyledSlot"
+  name: "StyledSlot",
+  props: ['name']
 };
 </script>
 
 <style scoped>
+.product-card {
+  text-decoration: none;
+  color: inherit;
+}
+
 .container {
   display: flex;
   justify-content: center;

@@ -12,7 +12,7 @@
         <NavBar />
       </div>
       <div id="product-list">
-        <SlotComponent v-for="x in products" :key="x.name">
+        <SlotComponent v-for="x in products" :key="x.name" :name="x.name">
           <img :src="x.img" alt="product image" />
           <h1 class="product-title">{{ x.name }} </h1>
         </SlotComponent>
@@ -78,6 +78,7 @@ export default {
   gap: 20px;
   height: 29vw;
   overflow-y: auto;
+  text-decoration: none;
 }
 
 #product-list img {
@@ -105,7 +106,7 @@ export default {
   border-radius: 50%;
   width: 50px;
   height: 50px;
-  animation: spin 0.7s linear infinite;
+  animation: spin 0.5s linear infinite;
 }
 
 @keyframes spin {

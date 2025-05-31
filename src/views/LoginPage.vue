@@ -104,8 +104,14 @@ export default {
         return;
       }
 
+      // REMOVE LINE WHEN checkDynamicContent IS ACTIVE
+      this.isLoginMode ? await this.handleLogin() : await this.handleRegister();
+
+
+
       // SARRAA Check Block, Manually Executed on handleAuth call (Proceed Button Press)
       // ML Classification using FastAPI hosted on endpoint http://127.0.0.1:8001
+      /*
       try {
         const prediction = await checkDynamicContent(username);
 
@@ -120,6 +126,7 @@ export default {
         console.error("Security check failed:", error);
         alert("An unexpected error occurred during validation.");
       }
+        */
     },
 
 

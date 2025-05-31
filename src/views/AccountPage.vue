@@ -65,7 +65,7 @@
 
       </div>
 
-      <!-- Return Button-->
+      <!-- Return Buttons-->
       <div class="return-options">
         <router-link to="/" class="redirect-button">
           <h1>Back To Login</h1>
