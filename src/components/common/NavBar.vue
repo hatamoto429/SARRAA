@@ -9,7 +9,7 @@
 
     <!-- Search Bar -->
     <div class="nav-center">
-      <input type="text" class="search-bar" placeholder="Search..." />
+      <input type="text" class="search-bar" placeholder="Search..." v-model="searchText" @input="onSearch" />
     </div>
 
     <!-- Account Icon -->
@@ -23,9 +23,17 @@
 
 <script>
 export default {
+  data() {
+    return {
+      searchText: ''
+    }
+  },
   methods: {
     toggleMenu() {
       console.log("Menu toggled");
+    },
+    onSearch() {
+      this.$emit('search', this.searchText);
     }
   }
 };
@@ -44,6 +52,7 @@ export default {
 
 .nav-left {
   flex: 0 0 auto;
+  padding-left: 200px;
 }
 
 .menu-icon {
@@ -61,14 +70,16 @@ export default {
 }
 
 .search-bar {
-  width: 60%;
+  width: 600px;
   padding: 8px 12px;
   border-radius: 20px;
   border: 1px solid #3b3936;
+  box-sizing: border-box;
 }
 
 .nav-right {
   flex: 0 0 auto;
+  padding-right: 200px;
 }
 
 .account-icon img {

@@ -1,5 +1,9 @@
 <template>
   <div class="home-container">
+    <!-- Nav Bar Content -->
+    <div class="navBar">
+      <NavBar @search="handleSearch" />
+    </div>
 
     <!-- Loading Spinner Simulation -->
     <div v-if="loading" class="loading-spinner">
@@ -8,13 +12,10 @@
 
     <!-- Home Tab Content -->
     <div v-else class="home-tab">
-      <div>
-        <NavBar />
-      </div>
       <div id="product-list">
-        <SlotComponent v-for="x in products" :key="x.name" :name="x.name">
+        <SlotComponent v-for="x in filteredProducts" :key="x.name" :name="x.name">
           <img :src="x.img" alt="product image" />
-          <h1 class="product-title">{{ x.name }} </h1>
+          <h1 class="product-title">{{ x.name }}</h1>
         </SlotComponent>
       </div>
     </div>
@@ -35,6 +36,7 @@ export default {
   data() {
     return {
       loading: true,
+      searchQuery: '',
       products: [
         { name: 'Phone', img: HeadphonesImg },
         { name: 'Laptop', img: HeadphonesImg },
@@ -45,6 +47,24 @@ export default {
         { name: 'Charger', img: HeadphonesImg },
         { name: 'Gift Card', img: HeadphonesImg }
       ]
+    }
+  },
+  mounted() {
+    setTimeout(() => {
+      this.loading = false;
+    }, 700);
+  },
+  computed: {
+    filteredProducts() {
+      const query = this.searchQuery.toLowerCase();
+      return this.products.filter(p =>
+        p.name.toLowerCase().includes(query)
+      );
+    }
+  },
+  methods: {
+    handleSearch(query) {
+      this.searchQuery = query;
     }
   },
   mounted() {
@@ -69,6 +89,10 @@ export default {
 .home-tab {
   /* border: 2px solid black; */
   flex: 1;
+}
+
+.navBar {
+  width: 100%;
 }
 
 #product-list {
