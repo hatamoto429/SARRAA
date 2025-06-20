@@ -105,17 +105,19 @@ export default {
       }
 
       // REMOVE LINE WHEN checkDynamicContent IS ACTIVE
-      this.isLoginMode ? await this.handleLogin() : await this.handleRegister();
+      //this.isLoginMode ? await this.handleLogin() : await this.handleRegister();
 
 
 
       // SARRAA Check Block, Manually Executed on handleAuth call (Proceed Button Press)
       // ML Classification using FastAPI hosted on endpoint http://127.0.0.1:8001
-      /*
+
       try {
         const prediction = await checkDynamicContent(username);
+        // test console.log(username);
 
         if (prediction === "malicious") {
+          // test console.log(prediction);
           alert("Security Warning: Malicious username detected.");
           return;
         }
@@ -126,7 +128,7 @@ export default {
         console.error("Security check failed:", error);
         alert("An unexpected error occurred during validation.");
       }
-        */
+
     },
 
 

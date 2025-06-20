@@ -4,8 +4,13 @@ from pydantic import BaseModel
 import joblib
 import os
 
-model = joblib.load("models/model.joblib")
-vectorizer = joblib.load("models/vectorizer.joblib")
+# VERSION 1
+#model = joblib.load("models/model.joblib")
+#vectorizer = joblib.load("models/vectorizer.joblib")
+
+# VERSION 2, improved
+model = joblib.load("models/newmodel.joblib")
+vectorizer = joblib.load("models/newvectorizer.joblib")
 
 app = FastAPI()
 
