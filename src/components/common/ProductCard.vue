@@ -1,21 +1,16 @@
 <template>
   <router-link :to="`/product/${name}`" class="product-card">
-    <div class="container">
-      <div class="flip-wrapper">
-        <div class="flip-card">
-          <div class="slot-box">
-            <slot></slot>
-          </div>
-        </div>
-      </div>
+    <div class="flip-wrapper">
+      <div class="flip-card" :style="{ backgroundImage: `url(${img})` }"></div>
     </div>
+    <p class="product-name">{{ name }}</p>
   </router-link>
 </template>
 
 <script>
 export default {
   name: "StyledSlot",
-  props: ['name']
+  props: ['name', 'img']
 };
 </script>
 
@@ -23,42 +18,40 @@ export default {
 .product-card {
   text-decoration: none;
   color: inherit;
-}
-
-.container {
+  width: 200px;
   display: flex;
-  justify-content: center;
+  flex-direction: column;
   align-items: center;
-  flex-wrap: wrap;
-  padding: 30px 80px 0px 80px;
 }
 
 .flip-wrapper {
   height: 300px;
-  width: 200px;
+  width: 100%;
   perspective: 1000px;
 }
 
 .flip-card {
-  transition: all 0.5s ease;
-  border-radius: 15px;
+  height: 100%;
+  width: 100%;
+  background-size: cover;
   background-position: center;
+  border-radius: 15px;
+  border: 2px solid black;
+  transition: transform 0.5s ease;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
 .flip-card:hover {
   transform: rotate3d(1, 1, 0, 30deg);
-}
-
-.slot-box {
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-  background: white;
-  border: 2px solid black;
-  padding: 10px;
-  border-radius: 15px;
-  transition: box-shadow 0.3s;
-}
-
-.slot-box:hover {
   box-shadow: 20px 20px 20px rgba(255, 242, 168, 0.2);
+}
+
+.product-name {
+  margin-top: 10px;
+  font-size: 1rem;
+  text-align: center;
+  color: white;
+  font-size: larger;
+  font-weight: bold;
 }
 </style>

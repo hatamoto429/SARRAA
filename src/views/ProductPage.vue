@@ -28,7 +28,25 @@
 
 
 <script>
+import PhoneImg from '@/assets/product_img/Phone.png'
+import LaptopImg from '@/assets/product_img/Laptop.png'
 import HeadphonesImg from '@/assets/product_img/Headphones.png'
+import TabletImg from '@/assets/product_img/Tablet.png'
+import CameraImg from '@/assets/product_img/Camera.png'
+import TVImg from '@/assets/product_img/TV.png'
+import ChargerImg from '@/assets/product_img/Charger.png'
+import GiftCardImg from '@/assets/product_img/GiftCard.png'
+
+const imageMap = {
+  Phone: PhoneImg,
+  Laptop: LaptopImg,
+  Headphones: HeadphonesImg,
+  Tablet: TabletImg,
+  Camera: CameraImg,
+  TV: TVImg,
+  Charger: ChargerImg,
+  'Gift Card': GiftCardImg
+}
 
 export default {
   name: 'ProductPage',
@@ -61,7 +79,7 @@ export default {
       // Map data you product object or display empty fallback
       this.product = {
         name: data.name || 'Unknown Product',
-        img: data.img || HeadphonesImg,
+        img: imageMap[data.name] || HeadphonesImg,
         description: data.description || 'No details available.',
         price: data.price || 0,
         stock: data.stock || 0,

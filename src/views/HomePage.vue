@@ -13,10 +13,7 @@
     <!-- Home Tab Content -->
     <div v-else class="home-tab">
       <div id="product-list">
-        <SlotComponent v-for="x in filteredProducts" :key="x.name" :name="x.name">
-          <img :src="x.img" alt="product image" />
-          <h1 class="product-title">{{ x.name }}</h1>
-        </SlotComponent>
+        <SlotComponent v-for="x in filteredProducts" :key="x.name" :name="x.name" :img="x.img" />
       </div>
     </div>
   </div>
@@ -25,7 +22,15 @@
 <script>
 import SlotComp from '@/components/common/ProductCard.vue'
 import NavBar from '@/components/common/NavBar.vue'
+
+import PhoneImg from '@/assets/product_img/Phone.png'
+import LaptopImg from '@/assets/product_img/Laptop.png'
 import HeadphonesImg from '@/assets/product_img/Headphones.png'
+import TabletImg from '@/assets/product_img/Tablet.png'
+import CameraImg from '@/assets/product_img/Camera.png'
+import TVImg from '@/assets/product_img/TV.png'
+import ChargerImg from '@/assets/product_img/Charger.png'
+import GiftCardImg from '@/assets/product_img/GiftCard.png'
 
 export default {
   components: {
@@ -38,21 +43,21 @@ export default {
       loading: true,
       searchQuery: '',
       products: [
-        { name: 'Phone', img: HeadphonesImg },
-        { name: 'Laptop', img: HeadphonesImg },
+        { name: 'Phone', img: PhoneImg },
+        { name: 'Laptop', img: LaptopImg },
         { name: 'Headphones', img: HeadphonesImg },
-        { name: 'Tablet', img: HeadphonesImg },
-        { name: 'Camera', img: HeadphonesImg },
-        { name: 'TV', img: HeadphonesImg },
-        { name: 'Charger', img: HeadphonesImg },
-        { name: 'Gift Card', img: HeadphonesImg }
+        { name: 'Tablet', img: TabletImg },
+        { name: 'Camera', img: CameraImg },
+        { name: 'TV', img: TVImg },
+        { name: 'Charger', img: ChargerImg },
+        { name: 'Gift Card', img: GiftCardImg }
       ]
     }
   },
   mounted() {
     setTimeout(() => {
       this.loading = false;
-    }, 700);
+    }, 500);
   },
   computed: {
     filteredProducts() {
@@ -80,6 +85,7 @@ export default {
   display: flex;
   flex-direction: column;
   align-items: center;
+  box-sizing: border-box;
   width: 95vw;
   height: 33vw;
   border-radius: 10px;
@@ -87,8 +93,9 @@ export default {
 }
 
 .home-tab {
-  /* border: 2px solid black; */
-  flex: 1;
+  width: 100%;
+  display: flex;
+  justify-content: center;
 }
 
 .navBar {
@@ -96,24 +103,21 @@ export default {
 }
 
 #product-list {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-around;
-  gap: 20px;
-  height: 29vw;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 30px;
+  padding: 20px;
+  height: 28vw;
+  width: 100%;
   overflow-y: auto;
-  text-decoration: none;
+  margin: 0 auto;
+  place-items: center;
 }
 
 #product-list img {
   display: block;
   margin: 5% auto 0;
   width: 50%;
-}
-
-.product-title {
-  text-align: center;
-  color: black;
 }
 
 .loading-spinner {
