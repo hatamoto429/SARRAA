@@ -5,16 +5,19 @@ from sklearn.ensemble import RandomForestClassifier
 from sklearn.metrics import classification_report
 import joblib
 
-df_raw = pd.read_csv("datasets/XSS.csv", header=None, quoting=3, encoding='utf-8', on_bad_lines='skip')
-print(df_raw.head(10))
+#df_raw = pd.read_csv("datasets/original_XSS.csv", header=None, quoting=3, encoding='utf-8', on_bad_lines='skip')
+#print(df_raw.head(10))
+
+# 12629 valid reads with original_XSS.csv
+# 0 valid reads with broken xss
+# 0 valid reads with valid xss
 
 # Load raw text dataset with columns: 'text' and 'label'
 df = pd.read_csv(
-    "datasets/XSS.csv",
+    "datasets/XSS_final_valid.csv",
     names=["text", "label"],
     encoding="utf-8",
-    on_bad_lines="skip",  # skip malformed lines to avoid parsing errors
-    quoting=3             # ignore quotes for raw text (QUOTE_NONE)
+    on_bad_lines="skip",
 )
 
 # Drop rows where any value is missing (NaN)
@@ -59,6 +62,9 @@ y_pred = clf.predict(X_test_vec)
 
 # Print classification metrics to evaluate model performance
 print(classification_report(y_test, y_pred))
+
+print(df['label'].value_counts(normalize=True))  # Class distribution ratio
+print(f"Duplicates: {df.duplicated().sum()}")     # Number of duplicate rows
 
 # Save vectorizer and model for later use in API or predictions
 joblib.dump(vectorizer, "models/vectorizer.joblib")

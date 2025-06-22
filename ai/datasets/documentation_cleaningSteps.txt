@@ -1,3 +1,5 @@
+XSS CLEANING STEPS
+
 ^\d+,  	with empty 	- to remove the numbers in the beginning
 ^"\d+,	with empty	- to remove number with " in the beginning
 ;+$  	with 'empty	- to remove ;;;;
@@ -11,3 +13,8 @@ tabs 	with empty	- to remove unnecessary tabs
 ,1" with ,1	- "
 
 USE cleanupscript to remove loose , inside payloads to stop wrongful read operation during training (interference of loose , and actual classifier seperator ,0 / ,1)
+
+
+SQLi CLEANING STEPS
+
+####

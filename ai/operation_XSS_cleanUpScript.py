@@ -1,9 +1,9 @@
-# Fix broken original XSS.csv by removing inner commas
+# Fix broken original original_XSS.csv by removing inner commas
 # Create new fixed XSS_fixed.csv
 
 # Removes loose , from middle of text payload to stop breaking parsing of classifier ,1 or ,0
 
-with open("datasets/XSS.csv", "r", encoding="utf-8") as infile, \
+with open("datasets/original_XSS.csv", "r", encoding="utf-8") as infile, \
         open("datasets/XSS_fixed.csv", "w", encoding="utf-8") as outfile:
     for line in infile:
         # Strip newline

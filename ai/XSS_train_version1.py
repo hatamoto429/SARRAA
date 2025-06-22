@@ -7,7 +7,7 @@ from sklearn.metrics import classification_report
 import joblib
 import os
 
-# With XSS.csv
+# With original_XSS.csv
 # 12741 valid reads with xss, 941 broken saved
 
 # With XSS_fixed.csv
@@ -16,8 +16,8 @@ import os
 # === STEP 1: CLEAN AND LOAD DATA ===
 
 INPUT_CSV = "datasets/XSS_fixed.csv"
-VALID_CSV = "datasets/tmp_valid.csv"
-BROKEN_CSV = "datasets/tmp_broken.csv"
+VALID_CSV = "datasets/XSS_tmp_valid.csv"
+BROKEN_CSV = "datasets/XSS_tmp_invalid.csv"
 MODEL_DIR = "models"
 
 # Ensure model directory exists
