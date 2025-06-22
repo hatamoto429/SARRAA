@@ -14,15 +14,7 @@
       </div>
     </div>
 
-    <!-- Return Button-->
-    <div class="return-options">
-      <router-link to="/" class="redirect-button">
-        <h1>Back To Login</h1>
-      </router-link>
-      <router-link to="/home" class="redirect-button">
-        <h1>Back To Home</h1>
-      </router-link>
-    </div>
+    <ActionBar />
   </div>
 </template>
 
@@ -36,6 +28,7 @@ import CameraImg from '@/assets/product_img/Camera.png'
 import TVImg from '@/assets/product_img/TV.png'
 import ChargerImg from '@/assets/product_img/Charger.png'
 import GiftCardImg from '@/assets/product_img/GiftCard.png'
+import ActionBar from '@/components/common/ActionBar.vue'
 
 const imageMap = {
   Phone: PhoneImg,
@@ -49,6 +42,9 @@ const imageMap = {
 }
 
 export default {
+  components: {
+    ActionBar
+  },
   name: 'ProductPage',
   data() {
     return {

@@ -1,88 +1,116 @@
 <template>
-  <div class="account-container">
+  <h1 class="title">Manage Your Account</h1>
 
-    <!-- Title -->
-    <h1 class="message">Manage Your Account</h1>
-    <div class="account-tab">
+  <div class="form-card">
+    <div class="form-content">
+      <div class="form-grid">
+        <!-- Single rows with label + input aligned -->
+        <div class="form-row">
+          <label>Username</label>
+          <input v-model="profile.username" disabled />
+        </div>
 
-      <div class="user-data">
+        <div class="form-row">
+          <label>Password</label>
+          <input v-model="profile.password" disabled />
+        </div>
 
-        <!-- User Info -->
-        <label>Username (locked)</label>
-        <input v-model="profile.username" disabled />
+        <div class="form-row">
+          <label>Full Name</label>
+          <input v-model="profile.full_name" />
+        </div>
 
-        <label>Password (displayed)</label>
-        <input v-model="profile.password" disabled />
+        <div class="form-row">
+          <label>Email</label>
+          <div>
+            <input v-model="profile.email" />
+            <small v-if="profile.email && !isValidEmail(profile.email)" class="error-text">Invalid email
+              format</small>
+          </div>
+        </div>
 
-        <label>Full Name</label>
-        <input v-model="profile.full_name" />
+        <div class="form-row">
+          <label>Phone Number</label>
+          <div>
+            <input v-model="profile.phone_number" />
+            <small v-if="profile.phone_number && !isValidPhone(profile.phone_number)" class="error-text">Invalid phone
+              number</small>
+          </div>
+        </div>
 
-        <label>Email</label>
-        <input v-model="profile.email" />
-        <span v-if="profile.email && !isValidEmail(profile.email)" style="color:red; font-size: 0.9em;">
-          Invalid email format
-        </span>
+        <div class="form-row">
+          <label>Date of Birth</label>
+          <div>
+            <input v-model="profile.date_of_birth" placeholder="YYYY-MM-DD" />
+            <small v-if="profile.date_of_birth && !isValidDate(profile.date_of_birth)" class="error-text">Date must be
+              in YYYY-MM-DD format</small>
+          </div>
+        </div>
 
-        <label>Phone Number</label>
-        <input v-model="profile.phone_number" />
-        <span v-if="profile.phone_number && !isValidPhone(profile.phone_number)" style="color:red; font-size: 0.9em;">
-          Invalid phone number
-        </span>
+        <div class="form-row">
+          <label>Shipping Address</label>
+          <input v-model="profile.shipping_address" />
+        </div>
 
-        <label>Date of Birth</label>
-        <input v-model="profile.date_of_birth" placeholder="YYYY-MM-DD" />
-        <span v-if="profile.date_of_birth && !isValidDate(profile.date_of_birth)" style="color:red; font-size: 0.9em;">
-          Date must be in YYYY-MM-DD format
-        </span>
+        <div class="form-row">
+          <label>Bank Account Number</label>
+          <input v-model="profile.bank_account_number" />
+        </div>
 
-        <label>Shipping Address</label>
-        <input v-model="profile.shipping_address" />
+        <div class="form-row">
+          <label>Credit Card Number</label>
+          <div>
+            <input v-model="profile.credit_card_number" />
+            <small v-if="profile.credit_card_number && !isValidCard(profile.credit_card_number)"
+              class="error-text">Invalid credit card number</small>
+          </div>
+        </div>
 
-        <label>Bank Account Number</label>
-        <input v-model="profile.bank_account_number" />
+        <div class="form-row">
+          <label>Paypal Info</label>
+          <input v-model="profile.paypal_info" />
+        </div>
 
-        <label>Credit Card Number</label>
-        <input v-model="profile.credit_card_number" />
-        <span v-if="profile.credit_card_number && !isValidCard(profile.credit_card_number)"
-          style="color:red; font-size: 0.9em;">
-          Invalid credit card number
-        </span>
+        <div class="form-row">
+          <label>Wallet Amount</label>
+          <div>
+            <input type="number" v-model="profile.wallet_amount" />
+            <small v-if="profile.wallet_amount !== '' && !isValidAmount(profile.wallet_amount)"
+              class="error-text">Invalid amount</small>
+          </div>
+        </div>
 
-        <label>Paypal Info</label>
-        <input v-model="profile.paypal_info" />
-
-        <label>Wallet Amount</label>
-        <input type="number" v-model="profile.wallet_amount" />
-        <span v-if="profile.wallet_amount !== '' && !isValidAmount(profile.wallet_amount)"
-          style="color:red; font-size: 0.9em;">
-          Invalid amount
-        </span>
-
-        <label>Wallet Password</label>
-        <input v-model="profile.wallet_password" />
-
-        <button :disabled="!canSubmit" @click="saveChanges">Save</button>
-
-      </div>
-
-      <!-- Return Buttons-->
-      <div class="return-options">
-        <router-link to="/" class="redirect-button">
-          <h1>Back To Login</h1>
-        </router-link>
-        <router-link to="/home" class="redirect-button">
-          <h1>Back To Home</h1>
-        </router-link>
+        <div class="form-row">
+          <label>Wallet Password</label>
+          <div>
+            <input type="number" v-model="profile.wallet_password" />
+            <small v-if="profile.wallet_password !== '' && !isValidAmount(profile.wallet_password)"
+              class="error-text">Invalid password</small>
+          </div>
+        </div>
       </div>
     </div>
+
+    <div class="form-footer">
+      <button :disabled="!canSubmit" @click="saveChanges">Save Changes</button>
+    </div>
   </div>
+
+  <ActionBar />
 </template>
+
+
+
 
 <script>
 import axios from 'axios';
 import useUserStore from '@/store/userStore.js'
+import ActionBar from '@/components/common/ActionBar.vue';
 
 export default {
+  components: {
+    ActionBar
+  },
   name: "AccountPage",
   data() {
     return {
@@ -164,72 +192,114 @@ export default {
 };
 </script>
 
-<style>
-.account-container {
+<style scoped>
+.page-wrapper {
+  min-height: 100vh;
+  padding: 2rem;
+  background: #f0f0f0;
+  box-sizing: border-box;
   display: flex;
   flex-direction: column;
   align-items: center;
-  width: auto;
-  height: auto;
-  padding: 30px;
 }
 
-.account-tab {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  width: auto;
+.title {
+  font-size: 2rem;
+  margin-bottom: 1.5rem;
+  color: #ffffff;
 }
 
-.user-data {
-  display: flex;
-  flex-direction: column;
-  max-height: 20vw;
-  overflow-y: auto;
-  padding: 20px;
-  border: 1px solid #ccc;
-  border-radius: 8px;
-  background-color: #838383;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+.form-card {
+  background: white;
+  border-radius: 10px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
   width: 100%;
-}
-
-.error {
-  text-align: center;
-  font-size: 45px;
-}
-
-.message {
-  text-align: center;
-}
-
-.info {
-  font-size: 10px;
-}
-
-.info .user-info {
-  border: 2px, black;
-  font-size: 5px;
-}
-
-.info .bank-info {
-  font-size: 5px;
-}
-
-.redirect-button {
-  color: rgb(0, 0, 0);
-  padding: 20px;
-  font-size: 12px;
-  font-weight: bold;
-  transition: font-size 0.3s ease;
-}
-
-.redirect-button:hover {
-  transform: scale(1.2);
-}
-
-.return-options {
+  max-width: 800px;
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
+  height: 70vh;
+  overflow: hidden;
+}
+
+.form-content {
+  padding: 1.5rem;
+  overflow-y: auto;
+  flex-grow: 1;
+}
+
+.form-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  row-gap: 1rem;
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: 200px 1fr;
+  column-gap: 1rem;
+  align-items: center;
+}
+
+label {
+  font-weight: bold;
+  color: #555;
+  text-align: right;
+}
+
+input {
+  padding: 0.5rem 0.75rem;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+input:disabled {
+  background-color: #eee;
+  color: #777;
+}
+
+small.error-text {
+  color: red;
+  font-size: 0.8rem;
+  margin-top: 0.2rem;
+  display: block;
+}
+
+.form-footer {
+  border-top: 1px solid #ddd;
+  padding: 1rem;
+  text-align: center;
+}
+
+.form-footer button {
+  padding: 0.6rem 1.5rem;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.form-footer button:disabled {
+  background-color: #aaa;
+  cursor: not-allowed;
+}
+
+.nav-links {
+  margin-top: 1.5rem;
+  display: flex;
+  gap: 1.5rem;
+}
+
+.nav-links a {
+  text-decoration: none;
+  color: #333;
+  font-size: 0.95rem;
+}
+
+.nav-links a:hover {
+  color: #007bff;
 }
 </style>
