@@ -13,6 +13,8 @@ import os
 # With XSS_fixed.csv
 # 13676 valid rows with xss new, 6 broken saved
 
+# OLD, Dont Use
+
 # === STEP 1: CLEAN AND LOAD DATA ===
 
 INPUT_CSV = "datasets/XSS_fixed.csv"
@@ -92,7 +94,7 @@ print(classification_report(y_test, y_pred))
 
 # === STEP 7: SAVE MODEL ===
 
-joblib.dump(vectorizer, os.path.join(MODEL_DIR, "vectorizer.joblib"))
-joblib.dump(clf, os.path.join(MODEL_DIR, "model.joblib"))
+joblib.dump(vectorizer, os.path.join(MODEL_DIR, "XSS_vectorizer_1.joblib"))
+joblib.dump(clf, os.path.join(MODEL_DIR, "XSS_model_1.joblib"))
 
 print("✅ Model and vectorizer trained and saved to 'models/'")

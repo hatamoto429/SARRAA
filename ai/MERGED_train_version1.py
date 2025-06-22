@@ -7,12 +7,13 @@ from sklearn.metrics import classification_report
 import joblib
 
 # === CONFIG ===
-INPUT_CSV = "datasets/XSS_fixed_enhanced_balanced.csv"
+INPUT_CSV = "datasets/original_SQLi.csv"
+
 MODEL_DIR = "models"
 os.makedirs(MODEL_DIR, exist_ok=True)
 
 # === STEP 1: LOAD & CLEAN DATA ===
-df = pd.read_csv(INPUT_CSV, header=None, names=["text", "label"], encoding="utf-8")
+df = pd.read_csv(INPUT_CSV, header=None, names=["text", "label"], encoding="utf-16")
 df.dropna(inplace=True)
 df["label"] = df["label"].astype(int)
 
@@ -55,7 +56,7 @@ print("\n🧪 Test Set Report:")
 print(classification_report(test_labels, test_pred))
 
 # === STEP 6: SAVE MODEL & VECTORIZER ===
-joblib.dump(vectorizer, os.path.join(MODEL_DIR, "XSS_vectorizer.joblib"))
-joblib.dump(clf, os.path.join(MODEL_DIR, "XSS_model.joblib"))
+joblib.dump(vectorizer, os.path.join(MODEL_DIR, "MERGED_vectorizer_1.joblib"))
+joblib.dump(clf, os.path.join(MODEL_DIR, "MERGED_model_1.joblib"))
 
 print("✅ Model and vectorizer saved in 'models/'")

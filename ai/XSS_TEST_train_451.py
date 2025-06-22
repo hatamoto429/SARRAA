@@ -5,6 +5,8 @@ from sklearn.ensemble import RandomForestClassifier
 from sklearn.metrics import classification_report
 import joblib
 
+# OLD, Dont Use
+
 df_raw = pd.read_csv("datasets/original_XSS.csv", header=None, quoting=3, encoding='utf-8', on_bad_lines='skip')
 print(df_raw.head(10))
 
@@ -61,7 +63,7 @@ y_pred = clf.predict(X_test_vec)
 print(classification_report(y_test, y_pred))
 
 # Save vectorizer and model for later use in API or predictions
-joblib.dump(vectorizer, "models/vectorizer.joblib")
-joblib.dump(clf, "models/model.joblib")
+joblib.dump(vectorizer, "models/XSS_vectorizer_1.joblib")
+joblib.dump(clf, "models/XSS_model_1.joblib")
 
 print("Model and vectorizer trained and saved.")

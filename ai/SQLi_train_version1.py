@@ -6,13 +6,19 @@ from sklearn.ensemble import RandomForestClassifier
 from sklearn.metrics import classification_report
 import joblib
 
+# Distribution:
+# 22.304 benign payloads
+# 11.411 malicious payloads
+# 45 unset payloads ? FIX
+# total - 33.760
+
 # === CONFIG ===
-INPUT_CSV = "datasets/XSS_fixed_enhanced_balanced.csv"
+INPUT_CSV = "datasets/original_SQLi.csv"
 MODEL_DIR = "models"
 os.makedirs(MODEL_DIR, exist_ok=True)
 
 # === STEP 1: LOAD & CLEAN DATA ===
-df = pd.read_csv(INPUT_CSV, header=None, names=["text", "label"], encoding="utf-8")
+df = pd.read_csv(INPUT_CSV, header=None, names=["text", "label"], encoding="utf-16")
 df.dropna(inplace=True)
 df["label"] = df["label"].astype(int)
 
@@ -40,6 +46,8 @@ X_train = vectorizer.fit_transform(train_texts)
 X_val = vectorizer.transform(val_texts)
 X_test = vectorizer.transform(test_texts)
 
+# Add extraction of invalid rows and save them
+
 # === STEP 4: TRAIN MODEL ===
 clf = RandomForestClassifier(random_state=42)
 clf.fit(X_train, train_labels)
@@ -55,7 +63,7 @@ print("\n🧪 Test Set Report:")
 print(classification_report(test_labels, test_pred))
 
 # === STEP 6: SAVE MODEL & VECTORIZER ===
-joblib.dump(vectorizer, os.path.join(MODEL_DIR, "XSS_vectorizer.joblib"))
-joblib.dump(clf, os.path.join(MODEL_DIR, "XSS_model.joblib"))
+joblib.dump(vectorizer, os.path.join(MODEL_DIR, "SQL_vectorizer.joblib"))
+joblib.dump(clf, os.path.join(MODEL_DIR, "SQL_model.joblib"))
 
 print("✅ Model and vectorizer saved in 'models/'")

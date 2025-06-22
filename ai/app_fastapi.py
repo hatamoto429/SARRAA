@@ -4,13 +4,21 @@ from pydantic import BaseModel
 import joblib
 import os
 
-# VERSION 1
-#model = joblib.load("models/model.joblib")
-#vectorizer = joblib.load("models/vectorizer.joblib")
+# XSS VERSION 1
+#model = joblib.load("models/XSS_model_1.joblib")
+#vectorizer = joblib.load("models/XSS_vectorizer_1.joblib")
 
-# VERSION 2, improved
-model = joblib.load("models/newmodel.joblib")
-vectorizer = joblib.load("models/newvectorizer.joblib")
+# XSS VERSION 2, improved
+#model = joblib.load("models/XSS_model.joblib")
+#vectorizer = joblib.load("models/XSS_vectorizer.joblib")
+
+# SQLi VERSION 1
+model = joblib.load("models/SQL_model.joblib")
+vectorizer = joblib.load("models/SQL_vectorizer.joblib")
+
+# MERGED VERSION 1
+#
+#
 
 app = FastAPI()
 

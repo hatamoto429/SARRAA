@@ -12,6 +12,8 @@ import joblib
 # 0 valid reads with broken xss
 # 0 valid reads with valid xss
 
+# OLD, Dont Use
+
 # Load raw text dataset with columns: 'text' and 'label'
 df = pd.read_csv(
     "datasets/XSS_final_valid.csv",
@@ -67,7 +69,7 @@ print(df['label'].value_counts(normalize=True))  # Class distribution ratio
 print(f"Duplicates: {df.duplicated().sum()}")     # Number of duplicate rows
 
 # Save vectorizer and model for later use in API or predictions
-joblib.dump(vectorizer, "models/vectorizer.joblib")
-joblib.dump(clf, "models/model.joblib")
+joblib.dump(vectorizer, "models/XSS_vectorizer_1.joblib")
+joblib.dump(clf, "models/XSS_model_1.joblib")
 
 print("Model and vectorizer trained and saved.")

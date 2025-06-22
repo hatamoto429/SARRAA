@@ -4,7 +4,7 @@ import joblib
 import pandas as pd
 
 app = Flask(__name__)
-model = joblib.load("models/model.joblib")
+model = joblib.load("models/XSS_model_1.joblib")
 
 @app.route('/predict', methods=['POST'])
 def predict():
