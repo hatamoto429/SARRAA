@@ -4,21 +4,17 @@ from pydantic import BaseModel
 import joblib
 import os
 
-# XSS VERSION 1
-#model = joblib.load("models/XSS_model_1.joblib")
-#vectorizer = joblib.load("models/XSS_vectorizer_1.joblib")
+# XSS VERSION, improved
+# model = joblib.load("models/XSS_model.joblib")
+# vectorizer = joblib.load("models/XSS_vectorizer.joblib")
 
-# XSS VERSION 2, improved
-#model = joblib.load("models/XSS_model.joblib")
-#vectorizer = joblib.load("models/XSS_vectorizer.joblib")
+# SQLi VERSION
+# model = joblib.load("models/SQL_model.joblib")
+# vectorizer = joblib.load("models/SQL_vectorizer.joblib")
 
-# SQLi VERSION 1
-model = joblib.load("models/SQL_model.joblib")
-vectorizer = joblib.load("models/SQL_vectorizer.joblib")
-
-# MERGED VERSION 1
-#
-#
+# MERGED VERSION
+model = joblib.load("models/MERGED_model.joblib")
+vectorizer = joblib.load("models/MERGED_vectorizer.joblib")
 
 app = FastAPI()
 
@@ -33,7 +29,6 @@ app.add_middleware(
 
 class InputText(BaseModel):
     text: str
-
 
 @app.get("/")
 def read_root():
@@ -50,7 +45,6 @@ def predict(input_data: InputText):
         "prediction": label,
         "class": int(prediction)
     }
-
 
 # VM Pentesting hosting
 # python -m uvicorn app_fastapi:app --reload --host 0.0.0.0 --port 8001
