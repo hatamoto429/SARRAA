@@ -13,15 +13,13 @@ export async function checkDynamicContent(text) {
     const response = await axios.post(
       `${MODEL_URL}/predict`,
       { text },
-      {
-        headers: { 'Content-Type': 'application/json' },
-      },
+      { headers: { 'Content-Type': 'application/json' } },
     )
 
-    return response.data?.prediction || 'safe'
+    return response.data?.prediction || 'benign'
   } catch (err) {
     console.error('Prediction error:', err)
-    return 'malicious' // Fallback to malicious
+    return 'malicious' // Fallback: Malicious - Deny by Default
   }
 }
 

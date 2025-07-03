@@ -113,34 +113,40 @@ export default {
 
     // Authentication
     async performSarraaCheckAndAuth() {
-      console.log('--- Starting SARRAA check and authentication process ---');
+      console.log('--- Starting authentication process ---');
       this.isLoading = true;
 
       try {
         if (this.useSarraaCheck) {
-          console.log(`SARRAA check is ENABLED. Checking username: ${this.currentUsername}`);
+          console.log(`SARRAA check is ENABLED. Checking inputs.`);
 
-          const prediction = await checkDynamicContent(this.currentUsername);
+          const inputsToCheck = {
+            username: this.currentUsername,
+            password: this.currentPassword,
+            // add other inputs if needed
+          };
 
-          console.log(`SARRAA check result for "${this.currentUsername}":`, prediction);
+          // Check each dynamic input individually and collect predictions
+          for (const [field, value] of Object.entries(inputsToCheck)) {
+            console.log(`Checking field "${field}" with content:`, value);
+            const prediction = await checkDynamicContent(value);
+            console.log(`Prediction for "${field}":`, prediction);
 
-          if (prediction === 'malicious') {
-            console.warn('SARRAA - Security Warning: Malicious content detected.');
-            alert('SARRAA - Security Warning: Malicious content detected.');
-            // Optionally write a log here or send to server
-            console.log('Aborting login/register due to malicious content.');
-            return; // stop further processing
-          } else {
-            console.log('SARRAA check passed. No malicious content detected.');
-            alert('SARRAA - Security Passed: No malicious content.');
+            if (prediction === 'malicious') {
+              console.warn(`Malicious content detected in field "${field}". Aborting.`);
+              alert(`Security Warning: Malicious content detected in ${field}.`);
+              return; // stop immediately
+            }
           }
+
+          console.log('SARRAA check passed. No malicious content detected.');
+          alert('SARRAA - Security Passed: No malicious content.');
         } else {
           console.log('SARRAA check is DISABLED. Skipping security checks.');
           alert('SARRAA DISABLED - SKIPPING CHECKS');
         }
 
-        console.log(`Proceeding with ${this.isLoginMode ? 'login' : 'registration'} process.`);
-
+        // Proceed with login or register after checks
         if (this.isLoginMode) {
           await this.handleLogin();
           console.log('Login process completed.');
@@ -154,7 +160,7 @@ export default {
         alert('An unexpected error occurred during validation.');
       } finally {
         this.isLoading = false;
-        console.log('--- End of SARRAA check and authentication process ---');
+        console.log('--- End of authentication process ---');
       }
     },
 
