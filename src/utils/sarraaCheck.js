@@ -21,7 +21,7 @@ export async function checkDynamicContent(text) {
     return response.data?.prediction || 'safe'
   } catch (err) {
     console.error('Prediction error:', err)
-    return 'safe' // Fallback to safe
+    return 'malicious' // Fallback to malicious
   }
 }
 

@@ -1,11 +1,16 @@
 <template>
-  <div class="login-container">
+  <!-- Loading -->
+  <div v-if="isLoading" class="loading-overlay">
+    <div class="spinner"></div>
+  </div>
 
+  <!-- Login Content -->
+  <div v-else class="login-container">
     <!-- Title -->
     <h1 class="title" v-html="titleText"></h1>
     <div class="login-tab">
 
-      <!-- Authentication Form -->
+      <!-- Authentication -->
       <form @submit.prevent="handleAuth" class="auth-form">
         <div class="input">
           <label :for="isLoginMode ? 'username' : 'choose_username'">
@@ -22,22 +27,24 @@
             :placeholder="isLoginMode ? 'Enter your password' : 'Choose your password'" />
         </div>
 
-        <!-- Submit Input Button -->
+        <!-- Submit -->
         <button type="submit" class="submit-button">
           <span class="arrow"></span>
           <span class="submit-text">Proceed</span>
         </button>
       </form>
     </div>
+  </div>
 
-    <!-- Authentication Switch -->
-    <div class="button-container">
+  <!-- Switch Mode -->
+  <div class="button-container">
+    <h2 class="button-title">Please Select Mode</h2>
+    <div class="button-field">
       <button :class="{ 'active': isLoginMode }" @click="toggleAuthMode(true)" type="button"
         class="button">Login</button>
       <button :class="{ 'active': !isLoginMode }" @click="toggleAuthMode(false)" type="button"
         class="button">Register</button>
     </div>
-
   </div>
 </template>
 
@@ -50,6 +57,7 @@ export default {
   name: "LoginPage",
   data() {
     return {
+      isLoading: false,
       isLoginMode: true,
       username: "",
       password: "",
@@ -93,9 +101,11 @@ export default {
       this.isLoginMode = isLogin;
     },
 
-    // EXTRACT HANDLE AUTH IN FRONTEND UTILS
-    // Authentication Submit
+    // OPTIONAL: EXTRACT HANDLE AUTH TO FRONTEND UTILS
+
+    // Authentication
     async handleAuth() {
+      this.isLoading = true;
       const username = this.currentUsername;
       const password = this.currentPassword;
 
@@ -107,17 +117,15 @@ export default {
       // REMOVE LINE WHEN checkDynamicContent IS ACTIVE
       //this.isLoginMode ? await this.handleLogin() : await this.handleRegister();
 
-
-
       // SARRAA Check Block, Manually Executed on handleAuth call (Proceed Button Press)
       // ML Classification using FastAPI hosted on endpoint http://127.0.0.1:8001
 
       try {
         const prediction = await checkDynamicContent(username);
-        // test console.log(username);
+        // TESTING - console.log(username);
 
         if (prediction === "malicious") {
-          // test console.log(prediction);
+          // TESTING - console.log(prediction);
           alert("Security Warning: Malicious username detected.");
           return;
         }
@@ -128,11 +136,10 @@ export default {
         console.error("Security check failed:", error);
         alert("An unexpected error occurred during validation.");
       }
-
     },
 
 
-    //Login
+    // Login
     async handleLogin() {
       const userStore = useUserStore();
 
@@ -161,20 +168,22 @@ export default {
           alert("An unexpected error occurred.");
           console.error(error);
         }
+      } finally {
+        this.isLoading = false;
       }
     },
 
-    //Registering
+    // Register
     async handleRegister() {
       try {
 
-        // Plain Register
+        // DEMO - Plain Register
         await axios.post("http://localhost:5002/api/registerplain", {
           username: this.choose_username,
           password: this.choose_password,
         });
 
-        // Hashed Register
+        // DEMO - Hashed Register
         // await axios.post("http://localhost:5002/api/registerhashed", {
         //   username: this.choose_username,
         //   password: this.choose_password,
@@ -185,6 +194,8 @@ export default {
       } catch (error) {
         console.error("Registration failed:", error.response?.data || error.message);
         alert(error.response?.data?.message || "Registration failed.");
+      } finally {
+        this.isLoading = false;
       }
     },
   }
@@ -192,13 +203,42 @@ export default {
 </script>
 
 <style>
+.spinner {
+  border: 4px solid rgba(0, 0, 0, 0.2);
+  border-top: 4px solid #fa8e04;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  animation: spin 0.8s linear infinite;
+  margin: 20px auto;
+}
+
+.loading-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(255, 255, 255, 0.199);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
 .login-container {
   display: flex;
   flex-direction: column;
   align-items: center;
   width: auto;
   height: auto;
-  padding: 30px;
+  padding: 20px;
 }
 
 .title {
@@ -228,10 +268,21 @@ export default {
   background-color: #fff;
 }
 
+.button-title {
+  font-size: 20px;
+  text-align: center;
+  margin: 0px;
+}
+
 .button-container {
   display: flex;
+  flex-direction: column;
+}
+
+.button-field {
+  display: flex;
   gap: 20px;
-  padding: 30px 0 20px;
+  padding: 10px 0 20px;
 }
 
 .button,
