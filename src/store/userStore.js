@@ -6,6 +6,7 @@ const useUserStore = defineStore('user', {
   state: () => ({
     username: '',
     password: '',
+    useSarraaCheck: false,
   }),
   actions: {
     setCredentials(username, password) {
@@ -15,6 +16,9 @@ const useUserStore = defineStore('user', {
     clearCredentials() {
       this.username = ''
       this.password = ''
+    },
+    setUseSarraaCheck(value) {
+      this.useSarraaCheck = value
     },
   },
 })

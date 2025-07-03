@@ -11,7 +11,7 @@
     <div class="login-tab">
 
       <!-- Authentication -->
-      <form @submit.prevent="handleAuth" class="auth-form">
+      <form @submit.prevent="performSarraaCheckAndAuth" class="auth-form">
         <div class="input">
           <label :for="isLoginMode ? 'username' : 'choose_username'">
             {{ isLoginMode ? 'Username' : 'Your Username' }}
@@ -38,7 +38,7 @@
 
   <!-- Switch Mode -->
   <div class="button-container">
-    <h2 class="button-title">Please Select Mode</h2>
+    <h2 class="button-title">Select Mode:</h2>
     <div class="button-field">
       <button :class="{ 'active': isLoginMode }" @click="toggleAuthMode(true)" type="button"
         class="button">Login</button>
@@ -62,7 +62,7 @@ export default {
       username: "",
       password: "",
       choose_username: "",
-      choose_password: "",
+      choose_password: ""
     };
   },
   computed: {
@@ -70,6 +70,14 @@ export default {
       return this.isLoginMode
         ? "Good To See You Again,<br>Please Login!"
         : "Welcome New User,<br>Please Enter Your Details!";
+    },
+    useSarraaCheck: {
+      get() {
+        return useUserStore().useSarraaCheck;
+      },
+      set(value) {
+        useUserStore().setUseSarraaCheck(value);
+      },
     },
     currentUsername: {
       get() {
@@ -104,40 +112,60 @@ export default {
     // OPTIONAL: EXTRACT HANDLE AUTH TO FRONTEND UTILS
 
     // Authentication
-    async handleAuth() {
+    async performSarraaCheckAndAuth() {
+      console.log('--- Starting SARRAA check and authentication process ---');
       this.isLoading = true;
-      const username = this.currentUsername;
-      const password = this.currentPassword;
-
-      if (!username || !password) {
-        alert("Please fill out all fields!");
-        return;
-      }
-
-      // REMOVE LINE WHEN checkDynamicContent IS ACTIVE
-      //this.isLoginMode ? await this.handleLogin() : await this.handleRegister();
-
-      // SARRAA Check Block, Manually Executed on handleAuth call (Proceed Button Press)
-      // ML Classification using FastAPI hosted on endpoint http://127.0.0.1:8001
 
       try {
-        const prediction = await checkDynamicContent(username);
-        // TESTING - console.log(username);
+        if (this.useSarraaCheck) {
+          console.log(`SARRAA check is ENABLED. Checking username: ${this.currentUsername}`);
 
-        if (prediction === "malicious") {
-          // TESTING - console.log(prediction);
-          alert("Security Warning: Malicious username detected.");
-          return;
+          const prediction = await checkDynamicContent(this.currentUsername);
+
+          console.log(`SARRAA check result for "${this.currentUsername}":`, prediction);
+
+          if (prediction === 'malicious') {
+            console.warn('SARRAA - Security Warning: Malicious content detected.');
+            alert('SARRAA - Security Warning: Malicious content detected.');
+            // Optionally write a log here or send to server
+            console.log('Aborting login/register due to malicious content.');
+            return; // stop further processing
+          } else {
+            console.log('SARRAA check passed. No malicious content detected.');
+            alert('SARRAA - Security Passed: No malicious content.');
+          }
+        } else {
+          console.log('SARRAA check is DISABLED. Skipping security checks.');
+          alert('SARRAA DISABLED - SKIPPING CHECKS');
         }
 
-        this.isLoginMode ? await this.handleLogin() : await this.handleRegister();
+        console.log(`Proceeding with ${this.isLoginMode ? 'login' : 'registration'} process.`);
+
+        if (this.isLoginMode) {
+          await this.handleLogin();
+          console.log('Login process completed.');
+        } else {
+          await this.handleRegister();
+          console.log('Registration process completed.');
+        }
 
       } catch (error) {
-        console.error("Security check failed:", error);
-        alert("An unexpected error occurred during validation.");
+        console.error('Security check or authentication process failed:', error);
+        alert('An unexpected error occurred during validation.');
+      } finally {
+        this.isLoading = false;
+        console.log('--- End of SARRAA check and authentication process ---');
       }
     },
 
+    // Check for empty fields
+    validateInputs() {
+      if (!this.currentUsername || !this.currentPassword) {
+        alert('Please fill out all fields!');
+        return false;
+      }
+      return true;
+    },
 
     // Login
     async handleLogin() {

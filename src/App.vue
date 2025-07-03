@@ -17,7 +17,7 @@
     <!-- Main -->
     <div class="main-container">
       <main class="content" :class="{ 'content-scaled': contentScaled }">
-        <router-view @hook:mounted="onRouteChange" />
+        <router-view />
       </main>
     </div>
 
