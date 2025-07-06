@@ -17,6 +17,19 @@ export const getProduct = (name, callback) => {
 }
 */
 
+// Vulnerable fetch all products (no user input, so no injection risk here)
+export const getAllProducts = (callback) => {
+  const query = 'SELECT * FROM products'
+  db.query(query, callback)
+}
+
+/* Safe version (functionally same for fetch all, but consistent):
+export const getAllProducts = (callback) => {
+  const query = 'SELECT * FROM products'
+  db.query(query, [], callback)
+}
+*/
+
 //  createProduct (vulnerable to SQLi)
 export const createProduct = (productData, callback) => {
   const { name, price, description, stock } = productData

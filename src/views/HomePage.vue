@@ -20,7 +20,6 @@
         </button>
       </div>
     </div>
-
   </div>
 </template>
 
@@ -37,57 +36,85 @@ import CameraImg from '@/assets/product_img/Camera.png'
 import TVImg from '@/assets/product_img/TV.png'
 import ChargerImg from '@/assets/product_img/Charger.png'
 import GiftCardImg from '@/assets/product_img/GiftCard.png'
+import NewProductImg from '@/assets/product_img/NewProduct.png'
 
 export default {
   components: {
-    'SlotComponent': SlotComp,
-    'NavBar': NavBar
+    SlotComponent: SlotComp,
+    NavBar,
   },
   name: "HomePage",
   data() {
     return {
       loading: true,
       searchQuery: '',
-      products: [
-        { name: 'Phone', img: PhoneImg },
-        { name: 'Laptop', img: LaptopImg },
-        { name: 'Headphones', img: HeadphonesImg },
-        { name: 'Tablet', img: TabletImg },
-        { name: 'Camera', img: CameraImg },
-        { name: 'TV', img: TVImg },
-        { name: 'Charger', img: ChargerImg },
-        { name: 'Gift Card', img: GiftCardImg }
-      ]
+      products: [],  // start empty, will fetch from backend
     }
   },
   mounted() {
-    setTimeout(() => {
-      this.loading = false;
-    }, 500);
+    this.loadProducts()
   },
   computed: {
     filteredProducts() {
-      const query = this.searchQuery.toLowerCase();
+      const query = this.searchQuery.toLowerCase()
       return this.products.filter(p =>
         p.name.toLowerCase().includes(query)
-      );
+      )
     },
     userStore() {
       return useUserStore()
     }
   },
   methods: {
-    handleSearch(query) {
-      this.searchQuery = query;
+    async loadProducts() {
+      try {
+        const response = await fetch('http://localhost:5002/api/products')
+        if (!response.ok) throw new Error('Failed to fetch products')
+
+        const data = await response.json()
+
+        // Map each product to include the correct image
+        this.products = data.map(p => ({
+          name: p.name,
+          img: this.getProductImage(p.name),
+        }))
+
+      } catch (error) {
+        console.error(error)
+        alert('Error loading products.')
+      } finally {
+        this.loading = false
+      }
     },
+
+    getProductImage(name) {
+      switch (name.toLowerCase()) {
+        case 'phone': return PhoneImg
+        case 'laptop': return LaptopImg
+        case 'headphones': return HeadphonesImg
+        case 'tablet': return TabletImg
+        case 'camera': return CameraImg
+        case 'tv': return TVImg
+        case 'charger': return ChargerImg
+        case 'gift card': return GiftCardImg
+        case 'new product': return NewProductImg
+        default: return NewProductImg
+      }
+    },
+
+    handleSearch(query) {
+      this.searchQuery = query
+    },
+
     goToCreateForm() {
       this.$router.push("/createproduct")
     }
   },
-};
+}
 </script>
 
 <style scoped>
+/* your existing styles here unchanged */
 .home-container {
   display: flex;
   flex-direction: column;

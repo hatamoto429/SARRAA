@@ -1,5 +1,7 @@
 use sarraadb;
 
+DROP TABLE IF EXISTS products;
+
 -- Create Products Table
 CREATE TABLE products (
     id INT AUTO_INCREMENT PRIMARY KEY,

@@ -6,13 +6,27 @@
       <img :src="product.img" class="product-img" alt="Product image" />
 
       <div class="product-info">
+        <!-- SAFE VERSION - Vue Moustache Syntax Escapes HTML with {{  }} -> Plain Text
         <h1 class="title">{{ product.name }}</h1>
         <p class="desc">{{ product.description }}</p>
         <p class="price">Price: <strong>${{ product.price }}</strong></p>
         <p class="stock">In Stock: <strong>{{ product.stock }}</strong></p>
         <button class="buy-btn">Buy Now</button>
+        -->
+        <div class="product-info">
+          <h1 class="title" v-html="product.name"></h1>
+          <p class="desc" v-html="product.description"></p>
+          <p class="price">Price: <strong v-html="product.price"></strong></p>
+          <p class="stock">In Stock: <strong v-html="product.stock"></strong></p>
+          <button class="buy-btn">Buy Now</button>
+        </div>
+
       </div>
     </div>
+
+    <button v-if="userStore.isAdmin" @click="goToCreateForm">
+      Create New Product
+    </button>
 
     <ActionBar />
   </div>
@@ -20,6 +34,8 @@
 
 
 <script>
+import useUserStore from "@/store/userStore.js"
+
 import PhoneImg from '@/assets/product_img/Phone.png'
 import LaptopImg from '@/assets/product_img/Laptop.png'
 import HeadphonesImg from '@/assets/product_img/Headphones.png'
@@ -59,6 +75,11 @@ export default {
       error: null
     }
   },
+  computed: {
+    userStore() {
+      return useUserStore()
+    }
+  },
   async mounted() {
     const { name } = this.$route.params
 
@@ -91,6 +112,11 @@ export default {
       }
     } finally {
       this.loading = false
+    }
+  },
+  methods: {
+    goToCreateForm() {
+      this.$router.push({ name: 'CreateProduct' })
     }
   }
 }

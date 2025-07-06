@@ -1,4 +1,4 @@
-import { getProduct, createProduct, updateProduct } from '../models/productModel.js'
+import { getProduct, getAllProducts, createProduct, updateProduct } from '../models/productModel.js'
 
 /* === VULNERABLE FETCH PRODUCT === */
 export const fetchProduct = (req, res) => {
@@ -7,6 +7,14 @@ export const fetchProduct = (req, res) => {
     if (err) return res.status(500).json({ message: 'Database error' })
     if (results.length === 0) return res.status(404).json({ message: 'Product not found' })
     res.status(200).json(results[0])
+  })
+}
+
+/* === VULNERABLE FETCH ALL PRODUCTS === */
+export const fetchAllProducts = (req, res) => {
+  getAllProducts((err, results) => {
+    if (err) return res.status(500).json({ message: 'Database error' })
+    res.status(200).json(results)
   })
 }
 
