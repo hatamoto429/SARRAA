@@ -197,8 +197,8 @@ export default {
           alert("Login successful!");
 
           // TESTING ONLY
-          // Save credentials in global Pinia store
-          userStore.setCredentials(this.currentUsername, this.currentPassword)
+          // Save Username reference to Local Store - usually JWT
+          userStore.setCredentials(this.currentUsername)
 
           this.$router.push("/home");
         } else {

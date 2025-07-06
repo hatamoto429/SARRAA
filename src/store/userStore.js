@@ -5,17 +5,17 @@ import { defineStore } from 'pinia'
 const useUserStore = defineStore('user', {
   state: () => ({
     username: '',
-    password: '',
+    admin: false,
     useSarraaCheck: false,
   }),
   actions: {
-    setCredentials(username, password) {
+    setCredentials(username, admin) {
       this.username = username
-      this.password = password
+      this.admin = admin
     },
     clearCredentials() {
       this.username = ''
-      this.password = ''
+      this.admin = false
     },
     setUseSarraaCheck(value) {
       this.useSarraaCheck = value
