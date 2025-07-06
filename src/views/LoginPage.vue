@@ -114,9 +114,11 @@ export default {
     // Authentication
     async performSarraaCheckAndAuth() {
 
+      /* Additional Vulnerability
       if (!this.validateInputs()) {
         return;
       };
+      */
 
       console.log('--- Starting authentication process ---');
       this.isLoading = true;

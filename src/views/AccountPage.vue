@@ -83,8 +83,8 @@
         <div class="form-row">
           <label>Wallet Password</label>
           <div>
-            <input type="number" v-model="profile.wallet_password" />
-            <small v-if="profile.wallet_password !== '' && !isValidAmount(profile.wallet_password)"
+            <input type="text" v-model="profile.wallet_password" />
+            <small v-if="profile.wallet_password !== '' && !isValidWalletPassword(profile.wallet_password)"
               class="error-text">Invalid password</small>
           </div>
         </div>
@@ -98,9 +98,6 @@
 
   <ActionBar />
 </template>
-
-
-
 
 <script>
 import axios from 'axios';
@@ -131,18 +128,46 @@ export default {
       originalProfile: null,
     };
   },
-  async mounted() {
-    const userStore = useUserStore();
-    const username = userStore.username;
-
-    console.log(username);
-
-    try {
-      const response = await axios(`http://localhost:5002/api/user/profile/${username}`);
-      this.profile = response.data;
-      this.originalProfile = JSON.parse(JSON.stringify(response.data));
-    } catch (error) {
-      console.log("Could not load User Data ", error);
+  methods: {
+    isValidEmail(email) {
+      return !email || /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+    },
+    isValidDate(date) {
+      if (!date) return true;
+      if (!/^\d{4}-\d{2}-\d{2}$/.test(date)) return false;
+      const [year, month, day] = date.split('-').map(Number);
+      const d = new Date(date);
+      return (
+        d.getFullYear() === year &&
+        d.getMonth() + 1 === month &&
+        d.getDate() === day
+      );
+    },
+    isValidPhone(phone) {
+      return !phone || /^[\d\s\-()+]{6,20}$/.test(phone);
+    },
+    isValidCard(card) {
+      return !card || /^\d{13,20}$/.test(card.replace(/\s+/g, ''));
+    },
+    isValidAmount(amount) {
+      if (amount === '' || amount === null) return true;
+      const val = parseFloat(amount);
+      return !isNaN(val) && val >= 0;
+    },
+    isValidWalletPassword(pw) {
+      if (!pw) return true;
+      if (typeof pw !== 'string') return false;
+      return pw.length >= 4;
+    },
+    async saveChanges() {
+      try {
+        const { username, password, ...editableFields } = this.profile;
+        await axios.put(`http://localhost:5002/api/user/profile/${username}`, editableFields);
+        alert('Profile updated!');
+        this.originalProfile = JSON.parse(JSON.stringify(this.profile));
+      } catch (error) {
+        console.log("Profile update failed ", error);
+      }
     }
   },
   computed: {
@@ -152,7 +177,8 @@ export default {
         this.isValidDate(this.profile.date_of_birth) &&
         this.isValidPhone(this.profile.phone_number) &&
         this.isValidCard(this.profile.credit_card_number) &&
-        this.isValidAmount(this.profile.wallet_amount)
+        this.isValidAmount(this.profile.wallet_amount) &&
+        this.isValidWalletPassword(this.profile.wallet_password)
       );
     },
     hasChanges() {
@@ -162,32 +188,24 @@ export default {
       return this.isFormValid && this.hasChanges;
     }
   },
-  methods: {
-    // Allow empty or null values — only reject if not empty AND invalid format
-    isValidEmail(email) {
-      return !email || /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
-    },
-    isValidDate(date) {
-      return !date || /^\d{4}-\d{2}-\d{2}$/.test(date);
-    },
-    isValidPhone(phone) {
-      return !phone || /^\d{6,20}$/.test(phone);
-    },
-    isValidCard(card) {
-      return !card || /^\d{4,20}$/.test(card);
-    },
-    isValidAmount(amount) {
-      return amount === '' || amount === null || !isNaN(parseFloat(amount));
-    },
-    async saveChanges() {
-      try {
-        const { username, password, ...editableFields } = this.profile;
-        await axios.put(`http://localhost:5002/api/user/profile/${username}`, editableFields);
-        alert('Profile updated!');
-      } catch (error) {
-        console.log("Profile update failed ", error);
-      }
-    }
+  mounted() {
+    const userStore = useUserStore();
+    const username = userStore.username;
+
+    axios.get(`http://localhost:5002/api/user/profile/data/${username}`)
+      .then(response => {
+        this.profile = response.data;
+
+        // DOB Fix
+        if (this.profile.date_of_birth) {
+          this.profile.date_of_birth = this.profile.date_of_birth.slice(0, 10);
+        }
+
+        this.originalProfile = JSON.parse(JSON.stringify(this.profile));
+      })
+      .catch(error => {
+        console.log("Could not load User Data ", error);
+      });
   }
 };
 </script>

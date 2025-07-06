@@ -1,4 +1,4 @@
-import { getUserProfile, updateUserProfile } from '../models/userModel.js'
+import { getUserProfile, loadUserData, updateUserProfile } from '../models/userModel.js'
 
 /* === VULNERABLE FETCH USER PROFILE === */
 export const fetchUserProfile = (req, res) => {
@@ -6,6 +6,16 @@ export const fetchUserProfile = (req, res) => {
   getUserProfile(username, (err, results) => {
     if (err) return res.status(500).json({ message: 'Database error' })
     if (results.length === 0) return res.status(404).json({ message: 'User not found' })
+    res.status(200).json(results[0])
+  })
+}
+
+/* === VULNERABLE LOAD USER DATA === */
+export const fetchUserData = (req, res) => {
+  const { username } = req.params
+  loadUserData(username, (err, results) => {
+    if (err) return res.status(500).json({ message: 'Database error' })
+    if (results.length === 0) return res.status(404).json({ message: 'User data not found' })
     res.status(200).json(results[0])
   })
 }

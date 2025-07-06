@@ -17,6 +17,16 @@ export const getUserProfile = (username, callback) => {
 }
 */
 
+// loadUserData (only username dependent from local store)
+export const loadUserData = (username, callback) => {
+  const query = 'SELECT * FROM users WHERE username = ?'
+  db.query(query, [username], callback)
+}
+
+/*
+safe load user data
+*/
+
 //  createUser (vulnerable to SQLi)
 export const createUser = (username, password, callback) => {
   // Vulnerable: direct string concatenation → SQL Injection possible
