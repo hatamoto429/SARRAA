@@ -28,7 +28,7 @@ df = pd.concat([xss_df, sqli_df], ignore_index=True)
 # Shuffle merged dataframe
 df = df.sample(frac=1, random_state=42).reset_index(drop=True)
 
-print(f"✅ Loaded combined dataset: {len(df)} rows")
+print(f" Loaded combined dataset: {len(df)} rows")
 print(df["label"].value_counts())
 
 # === STEP 2: TRAIN/VAL/TEST SPLIT ===
@@ -73,4 +73,4 @@ print(classification_report(test_labels, test_pred))
 joblib.dump(vectorizer, os.path.join(MODEL_DIR, "MERGED_vectorizer.joblib"))
 joblib.dump(clf, os.path.join(MODEL_DIR, "MERGED_model.joblib"))
 
-print("✅ Model and vectorizer saved in 'models/'")
+print(" Model and vectorizer saved in 'models/'")

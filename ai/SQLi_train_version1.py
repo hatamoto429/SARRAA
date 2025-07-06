@@ -22,7 +22,7 @@ df = pd.read_csv(INPUT_CSV, header=None, names=["text", "label"], encoding="utf-
 df.dropna(inplace=True)
 df["label"] = df["label"].astype(int)
 
-print(f"✅ Loaded dataset: {len(df)} rows")
+print(f" Loaded dataset: {len(df)} rows")
 print(df["label"].value_counts())
 
 # === STEP 2: TRAIN/VAL/TEST SPLIT ===
@@ -66,4 +66,4 @@ print(classification_report(test_labels, test_pred))
 joblib.dump(vectorizer, os.path.join(MODEL_DIR, "SQL_vectorizer.joblib"))
 joblib.dump(clf, os.path.join(MODEL_DIR, "SQL_model.joblib"))
 
-print("✅ Model and vectorizer saved in 'models/'")
+print(" Model and vectorizer saved in 'models/'")

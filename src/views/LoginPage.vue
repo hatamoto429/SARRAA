@@ -113,12 +113,17 @@ export default {
 
     // Authentication
     async performSarraaCheckAndAuth() {
+
+      if (!this.validateInputs()) {
+        return;
+      };
+
       console.log('--- Starting authentication process ---');
       this.isLoading = true;
 
       try {
         if (this.useSarraaCheck) {
-          console.log(`SARRAA check is ENABLED. Checking inputs.`);
+          console.log(`SARRAA ENABLED: Checking inputs.`);
 
           const inputsToCheck = {
             username: this.currentUsername,
@@ -133,17 +138,17 @@ export default {
             console.log(`Prediction for "${field}":`, prediction);
 
             if (prediction === 'malicious') {
-              console.warn(`Malicious content detected in field "${field}". Aborting.`);
-              alert(`Security Warning: Malicious content detected in ${field}.`);
+              console.warn(`SARRAA - FAILED. Malicious content detected in field "${field}".`);
+              alert(`SARRAA - FAILED: Malicious content detected in ${field}.`);
               return; // stop immediately
             }
           }
 
-          console.log('SARRAA check passed. No malicious content detected.');
-          alert('SARRAA - Security Passed: No malicious content.');
+          console.log('SARRAA - PASSED: No malicious content detected.');
+          alert('SARRAA - PASSED: No malicious content detected.');
         } else {
-          console.log('SARRAA check is DISABLED. Skipping security checks.');
-          alert('SARRAA DISABLED - SKIPPING CHECKS');
+          console.log('SARRAA DISABLED: Skipping security checks.');
+          alert('SARRAA DISABLED: Skipping security checks.');
         }
 
         // Proceed with login or register after checks
@@ -178,24 +183,27 @@ export default {
       const userStore = useUserStore();
 
       try {
-        const response = await axios.post("http://localhost:5002/api/login", {
-          username: this.username,
-          password: this.password,
+        const response = await axios.post("http://localhost:5002/api/auth/login", {
+          username: this.currentUsername,
+          password: this.currentPassword,
         });
 
+        console.log(this.currentUsername, this.currentPassword);
+
         // If status 200 and response.data has user info (like username), consider it successful
-        if (response.status === 200 && response.data && response.data.username) {
+        if (response.status === 200 && response.data && response.data.user && response.data.user.username) {
           alert("Login successful!");
 
           // TESTING ONLY
           // Save credentials in global Pinia store
-          userStore.setCredentials(this.username, this.password)
+          userStore.setCredentials(this.currentUsername, this.currentPassword)
 
           this.$router.push("/home");
         } else {
           alert("Invalid username or password.");
         }
       } catch (error) {
+        console.log(error);
         if (error.response && error.response.status === 401) {
           alert("Invalid username or password.");
         } else {
@@ -211,17 +219,10 @@ export default {
     async handleRegister() {
       try {
 
-        // DEMO - Plain Register
-        await axios.post("http://localhost:5002/api/registerplain", {
-          username: this.choose_username,
-          password: this.choose_password,
+        await axios.post("http://localhost:5002/api/auth/register", {
+          username: this.currentUsername,
+          password: this.currentPassword,
         });
-
-        // DEMO - Hashed Register
-        // await axios.post("http://localhost:5002/api/registerhashed", {
-        //   username: this.choose_username,
-        //   password: this.choose_password,
-        // });
 
         alert("Registration successful! Please log in.");
         this.toggleAuthMode(true);

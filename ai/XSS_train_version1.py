@@ -97,4 +97,4 @@ print(classification_report(y_test, y_pred))
 joblib.dump(vectorizer, os.path.join(MODEL_DIR, "XSS_vectorizer_1.joblib"))
 joblib.dump(clf, os.path.join(MODEL_DIR, "XSS_model_1.joblib"))
 
-print("✅ Model and vectorizer trained and saved to 'models/'")
+print(" Model and vectorizer trained and saved to 'models/'")
