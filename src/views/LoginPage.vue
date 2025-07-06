@@ -190,15 +190,17 @@ export default {
           password: this.currentPassword,
         });
 
+        // TESTING ONLY
         console.log(this.currentUsername, this.currentPassword);
 
         // If status 200 and response.data has user info (like username), consider it successful
         if (response.status === 200 && response.data && response.data.user && response.data.user.username) {
+          const { username, is_admin } = response.data.user;
           alert("Login successful!");
 
           // TESTING ONLY
           // Save Username reference to Local Store - usually JWT
-          userStore.setCredentials(this.currentUsername)
+          userStore.setUser({ username: username, isAdmin: is_admin });
 
           this.$router.push("/home");
         } else {

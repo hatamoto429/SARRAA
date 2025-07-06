@@ -1,7 +1,5 @@
 import { defineStore } from 'pinia'
 
-// Store User ID ?
-
 const useUserStore = defineStore('user', {
   state: () => ({
     username: '',
@@ -9,11 +7,11 @@ const useUserStore = defineStore('user', {
     useSarraaCheck: false,
   }),
   actions: {
-    setCredentials(username, admin) {
+    setUser({ username, isAdmin }) {
       this.username = username
-      this.admin = admin
+      this.admin = isAdmin
     },
-    clearCredentials() {
+    clearUser() {
       this.username = ''
       this.admin = false
     },
