@@ -32,9 +32,9 @@
   </div>
 </template>
 
-
 <script>
 import useUserStore from "@/store/userStore.js"
+import checkDynamicContent from "@/utils/sarraaCheck.js"
 
 import PhoneImg from '@/assets/product_img/Phone.png'
 import LaptopImg from '@/assets/product_img/Laptop.png'
@@ -81,6 +81,7 @@ export default {
     }
   },
   async mounted() {
+    // Run product load + SARRAA check sequentially
     const { name } = this.$route.params
 
     try {
@@ -93,7 +94,7 @@ export default {
 
       const data = await response.json()
 
-      // Map data you product object or display empty fallback
+      // Map to product with fallbacks
       this.product = {
         name: data.name || 'Unknown Product',
         img: imageMap[data.name] || HeadphonesImg,
@@ -101,6 +102,10 @@ export default {
         price: data.price || 0,
         stock: data.stock || 0,
       }
+
+      // Now perform SARRAA check on vulnerable fields
+      await this.performSarraaCheckOnProductFields()
+
     } catch (err) {
       this.error = err.message
       this.product = {
@@ -117,6 +122,41 @@ export default {
   methods: {
     goToCreateForm() {
       this.$router.push({ name: 'CreateProduct' })
+    },
+
+    async performSarraaCheckOnProductFields() {
+      // Only perform check if userStore.useSarraaCheck is enabled
+      if (!this.userStore.useSarraaCheck) {
+        console.log('SARRAA disabled, skipping checks on product fields.')
+        return
+      }
+
+      // Fields to check for malicious content
+      const fieldsToCheck = {
+        name: this.product.name,
+        description: this.product.description,
+        // price and stock are numbers, but just in case convert to string and check
+        price: this.product.price.toString(),
+        stock: this.product.stock.toString(),
+      }
+
+      try {
+        for (const [field, value] of Object.entries(fieldsToCheck)) {
+          console.log(`SARRAA checking field "${field}":`, value)
+          const prediction = await checkDynamicContent(value)
+          console.log(`SARRAA prediction for "${field}":`, prediction)
+          if (prediction === 'malicious') {
+            alert(`SARRAA - FAILED: Malicious content detected in product field "${field}". Redirecting to home.`)
+            this.$router.push('/home')
+            return
+          }
+        }
+        alert('SARRAA - PASSED: No malicious content detected in product fields.')
+      } catch (error) {
+        console.error('SARRAA check failed:', error)
+        alert('Error during security check. Redirecting to home.')
+        this.$router.push('/home')
+      }
     }
   }
 }
