@@ -14,14 +14,20 @@
     <div v-else class="home-tab">
       <div id="product-list">
         <SlotComponent v-for="x in filteredProducts" :key="x.name" :name="x.name" :img="x.img" />
+        <!-- New Button only for Admins -->
+        <button v-if="userStore.admin" class="create-button" @click="goToCreateForm">
+          Create New Product
+        </button>
       </div>
     </div>
+
   </div>
 </template>
 
 <script>
 import SlotComp from '@/components/common/ProductCard.vue'
 import NavBar from '@/components/common/NavBar.vue'
+import useUserStore from '@/store/userStore'
 
 import PhoneImg from '@/assets/product_img/Phone.png'
 import LaptopImg from '@/assets/product_img/Laptop.png'
@@ -65,18 +71,19 @@ export default {
       return this.products.filter(p =>
         p.name.toLowerCase().includes(query)
       );
+    },
+    userStore() {
+      return useUserStore()
     }
   },
   methods: {
     handleSearch(query) {
       this.searchQuery = query;
+    },
+    goToCreateForm() {
+      this.$router.push("/createproduct")
     }
   },
-  mounted() {
-    setTimeout(() => {
-      this.loading = false;
-    }, 700);
-  }
 };
 </script>
 
@@ -87,7 +94,7 @@ export default {
   align-items: center;
   box-sizing: border-box;
   width: 95vw;
-  height: 33vw;
+  height: 100vh;
   border-radius: 10px;
   overflow: hidden;
 }
@@ -107,7 +114,7 @@ export default {
   grid-template-columns: repeat(4, 1fr);
   gap: 30px;
   padding: 20px;
-  height: 28vw;
+  height: 55vh;
   width: 100%;
   overflow-y: auto;
   margin: 0 auto;
@@ -118,6 +125,17 @@ export default {
   display: block;
   margin: 5% auto 0;
   width: 50%;
+}
+
+.create-button {
+  margin-top: 20px;
+  padding: 20px;
+  background-color: #871a79;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-weight: bold;
+  cursor: pointer;
 }
 
 .loading-spinner {

@@ -1,5 +1,5 @@
 import express from 'express'
-import { fetchProduct } from '../controllers/productController.js'
+import { fetchProduct, createNewProduct } from '../controllers/productController.js'
 
 const router = express.Router()
 
@@ -7,5 +7,8 @@ const router = express.Router()
 
 // Vulnerable or safe product fetch (toggle by commenting/uncommenting inside controller)
 router.get('/:name', fetchProduct)
+
+// Vulnerable post new product
+router.post('/', createNewProduct)
 
 export default router
