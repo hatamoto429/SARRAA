@@ -5,6 +5,8 @@ export const db = mysql.createConnection({
   user: 'root',
   password: 'root',
   database: 'sarraadb',
+  // VULNERABLE - ENABLES MULTIPLES STATEMENTS
+  multipleStatements: true,
 })
 
 db.connect((err) => {

@@ -2,6 +2,6 @@ use sarraadb;
 
 SHOW TABLES;
 
--- SELECT * FROM users;
+SELECT * FROM users;
 
-SELECT * FROM products;
+-- SELECT * FROM products;

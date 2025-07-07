@@ -4,8 +4,10 @@ import { db } from '../connectdb.js'
 
 //  getUserProfile (vulnerable to SQLi)
 export const getUserProfile = (username, password, callback) => {
+  console.log('Username input:', username)
   const query = `SELECT * FROM users WHERE username = '${username}' AND password = '${password}'`
-  console.log(query)
+
+  console.log('Executing query:', query)
   db.query(query, callback)
 }
 

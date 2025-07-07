@@ -5,7 +5,7 @@ USE sarraadb;
 -- Drop existing users table if needed
 DROP TABLE IF EXISTS users;
 
--- Create the users table with all fields from the beginning
+-- Create the users table with the updated structure (15 columns)
 CREATE TABLE users (
   id INT AUTO_INCREMENT PRIMARY KEY,
   username VARCHAR(50) NOT NULL,
@@ -20,10 +20,29 @@ CREATE TABLE users (
   paypal_info VARCHAR(100),
   wallet_amount DECIMAL(10,2),
   wallet_password VARCHAR(255),
-  bought_items TEXT
+  bought_items TEXT,
+  is_admin BOOLEAN DEFAULT FALSE
 );
 
--- Insert full user data
+-- Insert admin user with the is_admin column
+INSERT INTO users (
+  username, password, full_name, email, phone_number, date_of_birth,
+  shipping_address, bank_account_number, credit_card_number,
+  paypal_info, wallet_amount, wallet_password, bought_items, is_admin
+) VALUES (
+  'admin', 'admin', 'Root Admin', 'admin@sarraadb.local', '555-0111',
+  '2025-01-01',
+  'Admin HQ',
+  'DE00123456789012345678',
+  '4111111111111111',
+  'admin@paypal.com',
+  0.00,
+  'adminpass',
+  '',
+  TRUE
+);
+
+-- Insert all other users
 INSERT INTO users (
   username, password, full_name, email, phone_number, date_of_birth,
   shipping_address, bank_account_number, credit_card_number,

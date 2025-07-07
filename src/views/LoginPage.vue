@@ -194,14 +194,14 @@ export default {
         console.log(this.currentUsername, this.currentPassword);
 
         // If status 200 and response.data has user info (like username), consider it successful
-        if (response.status === 200 && response.data && response.data.user && response.data.user.username) {
-          const { username, is_admin } = response.data.user;
+        if (response.status === 200 && response.data && response.data.users && response.data.users.length > 0) {
+          const firstUser = response.data.users[0];
+          const { username, is_admin } = firstUser;
           alert("Login successful!");
 
           // TESTING ONLY
           // Save Username reference to Local Store - usually JWT
           userStore.setUser({ username: username, isAdmin: is_admin });
-
           this.$router.push("/home");
         } else {
           alert("Invalid username or password.");
