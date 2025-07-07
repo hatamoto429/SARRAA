@@ -1,0 +1,12 @@
+SQLi Checks:
+
+Login Page
+
+
+
+
+XSS Checks: 
+
+Persistent XSS - Product Page Product Info
+
+Reflected / DOM-Based XSS - Home Page Search Bar, App Website URL 

@@ -27,6 +27,7 @@
 <script>
 import Background from './components/common/Background.vue'
 import Footer from './components/common/Footer.vue'
+import checkDynamicContent from '@/utils/sarraaCheck.js'
 
 export default {
   name: "App",
@@ -47,12 +48,31 @@ export default {
       this.logoMoved = to.path !== '/login';
       this.contentScaled = to.path !== '/login';
       this.showTitle = to.path !== '/login';
+
+      // New SARRAA URL XSS check
+      this.checkUrlForXSS(to.fullPath);
     }
   },
   mounted() {
     this.logoMoved = this.$route.path !== '/login';
     this.contentScaled = this.$route.path !== '/login';
     this.showTitle = this.$route.path !== '/login';
+
+    // Check URL on initial load
+    this.checkUrlForXSS(this.$route.fullPath);
+  },
+  methods: {
+    async checkUrlForXSS(url) {
+      try {
+        const prediction = await checkDynamicContent(url);
+        if (prediction === 'malicious') {
+          alert('Malicious URL manipulation detected! Redirecting ...');
+          this.$router.replace('/login');
+        }
+      } catch (error) {
+        console.error('URL security check failed:', error);
+      }
+    }
   }
 }
 </script>
