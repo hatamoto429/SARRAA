@@ -34,7 +34,10 @@ export default {
     },
     onSearch() {
       this.$emit('search', this.searchText);
-    }
+    },
+    clearInput() {
+      this.searchText = '';
+    },
   }
 };
 </script>

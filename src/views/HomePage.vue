@@ -2,7 +2,7 @@
   <div class="home-container">
     <!-- Nav Bar Content -->
     <div class="navBar">
-      <NavBar @search="handleSearch" />
+      <NavBar ref="navbar" @search="handleSearch" />
     </div>
 
     <!-- Loading Spinner Simulation -->
@@ -27,6 +27,7 @@
 import SlotComp from '@/components/common/ProductCard.vue'
 import NavBar from '@/components/common/NavBar.vue'
 import useUserStore from '@/store/userStore'
+import checkDynamicContent from '@/utils/sarraaCheck.js'
 
 import PhoneImg from '@/assets/product_img/Phone.png'
 import LaptopImg from '@/assets/product_img/Laptop.png'
@@ -86,7 +87,6 @@ export default {
         this.loading = false
       }
     },
-
     getProductImage(name) {
       switch (name.toLowerCase()) {
         case 'phone': return PhoneImg
@@ -101,11 +101,33 @@ export default {
         default: return NewProductImg
       }
     },
+    async handleSearch(query) {
+      if (query.trim() === '') {
+        this.clearSearch()
+        return
+      }
 
-    handleSearch(query) {
-      this.searchQuery = query
+      try {
+        const prediction = await checkDynamicContent(query)
+        console.log(`SARRAA prediction for search query: ${prediction}`)
+
+        if (prediction === 'malicious') {
+          alert('Malicious input detected! Content Cleared!')
+          this.clearSearch()
+        } else {
+          this.searchQuery = query
+        }
+      } catch (error) {
+        console.error('Security check failed:', error)
+        this.clearSearch()
+      }
     },
-
+    clearSearch() {
+      this.searchQuery = ''
+      if (this.$refs.navbar) {
+        this.$refs.navbar.clearInput()
+      }
+    },
     goToCreateForm() {
       this.$router.push("/createproduct")
     }
@@ -114,7 +136,6 @@ export default {
 </script>
 
 <style scoped>
-/* your existing styles here unchanged */
 .home-container {
   display: flex;
   flex-direction: column;
