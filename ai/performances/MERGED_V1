@@ -1,0 +1,41 @@
+Datasets:
+
+XSS_fixed_enhanced_balanced
+original_SQLi
+
+Results:
+
+(ai) PS C:\SARRAA\ai> python MERGED_train_version1.py
+ Loaded combined dataset: 49987 rows
+label
+0    30487
+1    19500
+Name: count, dtype: int64
+📊 Split sizes: Train=35990, Val=3999, Test=9998
+label
+0    0.609899
+1    0.390101
+Name: proportion, dtype: float64
+
+🧪 Validation Set Report:
+              precision    recall  f1-score   support
+
+           0       0.98      1.00      0.99      2439
+           1       0.99      0.97      0.98      1560
+
+    accuracy                           0.99      3999
+   macro avg       0.99      0.98      0.98      3999
+weighted avg       0.99      0.99      0.99      3999
+
+
+🧪 Test Set Report:
+              precision    recall  f1-score   support
+
+           0       0.98      1.00      0.99      6098
+           1       0.99      0.97      0.98      3900
+
+    accuracy                           0.99      9998
+   macro avg       0.99      0.98      0.99      9998
+weighted avg       0.99      0.99      0.99      9998
+
+ Model and vectorizer saved in 'models/'

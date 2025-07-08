@@ -13,8 +13,8 @@ import os
 # vectorizer = joblib.load("models/SQL_vectorizer.joblib")
 
 # MERGED VERSION
-model = joblib.load("models/MERGED_model.joblib")
-vectorizer = joblib.load("models/MERGED_vectorizer.joblib")
+model = joblib.load("models/MERGED_upsample_model.joblib")
+vectorizer = joblib.load("models/MERGED_upsample_vectorizer.joblib")
 
 app = FastAPI()
 

@@ -11,27 +11,27 @@ MODEL_DIR = "models"
 os.makedirs(MODEL_DIR, exist_ok=True)
 
 # === STEP 1: LOAD & CLEAN BOTH DATASETS ===
-
-# Load XSS dataset
 xss_df = pd.read_csv("datasets/XSS_fixed_enhanced_balanced.csv", header=None, names=["text", "label"], encoding="utf-8")
 xss_df.dropna(inplace=True)
 xss_df["label"] = xss_df["label"].astype(int)
 
-# Load SQLi dataset
-sqli_df = pd.read_csv("datasets/SQLi_fixed_reduced_balanced.csv", header=None, names=["text", "label"], encoding="utf-16", quotechar='"', engine='python')
+sqli_df = pd.read_csv("datasets/original_SQLi.csv", header=None, names=["text", "label"], encoding="utf-16", quotechar='"', engine='python')
 sqli_df.dropna(inplace=True)
 sqli_df["label"] = sqli_df["label"].astype(int)
 
-# Combine both datasets
-df = pd.concat([xss_df, sqli_df], ignore_index=True)
+# === BALANCE DATASETS BY UPSAMPLING XSS TO SQLi SIZE ===
+max_size = len(sqli_df)
+xss_df_balanced = xss_df.sample(n=max_size, replace=True, random_state=42)
+sqli_df_balanced = sqli_df.copy()
 
-# Shuffle merged dataframe
+# Combine balanced datasets
+df = pd.concat([xss_df_balanced, sqli_df_balanced], ignore_index=True)
 df = df.sample(frac=1, random_state=42).reset_index(drop=True)
 
-print(f" Loaded combined dataset: {len(df)} rows")
+print(f"Loaded balanced combined dataset: {len(df)} rows")
 print(df["label"].value_counts())
 
-# === STEP 2: TRAIN/VAL/TEST SPLIT ===
+# === STEP 2: SPLIT DATA ===
 train_val_texts, test_texts, train_val_labels, test_labels = train_test_split(
     df["text"], df["label"], test_size=0.2, random_state=42, stratify=df["label"]
 )
@@ -41,9 +41,7 @@ train_texts, val_texts, train_labels, val_labels = train_test_split(
 )
 
 print(f"📊 Split sizes: Train={len(train_texts)}, Val={len(val_texts)}, Test={len(test_texts)}")
-
-# Balance check
-print(df["label"].value_counts(normalize=True))
+print("Class distribution in full data:\n", df["label"].value_counts(normalize=True))
 
 # === STEP 3: FEATURE EXTRACTION ===
 vectorizer = TfidfVectorizer(
@@ -70,7 +68,7 @@ print("\n🧪 Test Set Report:")
 print(classification_report(test_labels, test_pred))
 
 # === STEP 6: SAVE MODEL & VECTORIZER ===
-joblib.dump(vectorizer, os.path.join(MODEL_DIR, "MERGED2_vectorizer.joblib"))
-joblib.dump(clf, os.path.join(MODEL_DIR, "MERGED2_model.joblib"))
+joblib.dump(vectorizer, os.path.join(MODEL_DIR, "MERGED_upsample_vectorizer.joblib"))
+joblib.dump(clf, os.path.join(MODEL_DIR, "MERGED_upsample_model.joblib"))
 
-print(" Model and vectorizer saved in 'models/'")
+print("Model and vectorizer saved in 'models/'")
