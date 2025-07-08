@@ -4,7 +4,7 @@ const useUserStore = defineStore('user', {
   state: () => ({
     username: '',
     admin: false,
-    useSarraaCheck: false,
+    useSarraaCheck: true,
   }),
   actions: {
     setUser({ username, isAdmin }) {

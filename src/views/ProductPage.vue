@@ -1,10 +1,12 @@
 <template>
+  <!-- Product Page -->
   <div class="product-detail">
     <div v-if="loading">Loading product details...</div>
     <div v-else-if="error">{{ error }}</div>
     <div v-else class="product-main">
       <img :src="product.img" class="product-img" alt="Product image" />
 
+      <!-- Product Details -->
       <div class="product-info">
         <!-- SAFE VERSION - Vue Moustache Syntax Escapes HTML with {{  }} -> Plain Text
         <h1 class="title">{{ product.name }}</h1>
@@ -20,14 +22,13 @@
           <p class="stock">In Stock: <strong v-html="product.stock"></strong></p>
           <button class="buy-btn">Buy Now</button>
         </div>
-
       </div>
     </div>
 
+    <!-- Create button only visible with admin privileges -->
     <button v-if="userStore.isAdmin" @click="goToCreateForm">
       Create New Product
     </button>
-
     <ActionBar />
   </div>
 </template>
@@ -58,10 +59,10 @@ const imageMap = {
 }
 
 export default {
+  name: 'ProductPage',
   components: {
     ActionBar
   },
-  name: 'ProductPage',
   data() {
     return {
       product: {
@@ -73,11 +74,6 @@ export default {
       },
       loading: true,
       error: null
-    }
-  },
-  computed: {
-    userStore() {
-      return useUserStore()
     }
   },
   async mounted() {
@@ -119,11 +115,17 @@ export default {
       this.loading = false
     }
   },
+  computed: {
+    userStore() {
+      return useUserStore()
+    }
+  },
   methods: {
     goToCreateForm() {
       this.$router.push({ name: 'CreateProduct' })
     },
 
+    // perform sarraa check on product field loading
     async performSarraaCheckOnProductFields() {
       // Only perform check if userStore.useSarraaCheck is enabled
       if (!this.userStore.useSarraaCheck) {

@@ -1,11 +1,14 @@
 <template>
-  <!-- Loading -->
+  <!-- Login Page -->
+
+  <!-- Loading Spinner-->
   <div v-if="isLoading" class="loading-overlay">
     <div class="spinner"></div>
   </div>
 
   <!-- Login Content -->
   <div v-else class="login-container">
+
     <!-- Title -->
     <h1 class="title" v-html="titleText"></h1>
     <div class="login-tab">
@@ -71,13 +74,12 @@ export default {
         ? "Good To See You Again,<br>Please Login!"
         : "Welcome New User,<br>Please Enter Your Details!";
     },
+    userStore() {
+      return useUserStore()
+    },
     useSarraaCheck: {
-      get() {
-        return useUserStore().useSarraaCheck;
-      },
-      set(value) {
-        useUserStore().setUseSarraaCheck(value);
-      },
+      get() { return this.userStore.useSarraaCheck },
+      set(value) { this.userStore.setUseSarraaCheck(value) }
     },
     currentUsername: {
       get() {
@@ -111,9 +113,8 @@ export default {
 
     // OPTIONAL: EXTRACT HANDLE AUTH TO FRONTEND UTILS
 
-    // Authentication
+    // perform sarraa check on authentication initialization
     async performSarraaCheckAndAuth() {
-
       /* Additional Vulnerability
       if (!this.validateInputs()) {
         return;
@@ -124,16 +125,18 @@ export default {
       this.isLoading = true;
 
       try {
-        if (this.useSarraaCheck) {
-          console.log(`SARRAA ENABLED: Checking inputs.`);
+        if (!this.useSarraaCheck) {
+          console.log('SARRAA DISABLED: Skipping security checks.');
+          alert('SARRAA DISABLED: Skipping security checks.');
+        } else {
+          console.log('SARRAA ENABLED: Checking inputs.');
 
           const inputsToCheck = {
             username: this.currentUsername,
             password: this.currentPassword,
-            // add other inputs if needed
+            // add other input fields if needed
           };
 
-          // Check each dynamic input individually and collect predictions
           for (const [field, value] of Object.entries(inputsToCheck)) {
             console.log(`Checking field "${field}" with content:`, value);
             const prediction = await checkDynamicContent(value);
@@ -148,9 +151,6 @@ export default {
 
           console.log('SARRAA - PASSED: No malicious content detected.');
           alert('SARRAA - PASSED: No malicious content detected.');
-        } else {
-          console.log('SARRAA DISABLED: Skipping security checks.');
-          alert('SARRAA DISABLED: Skipping security checks.');
         }
 
         // Proceed with login or register after checks

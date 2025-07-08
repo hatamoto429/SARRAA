@@ -1,4 +1,5 @@
 <template>
+  <!-- Create Product Page -->
   <div class="product-detail">
     <div class="product-main">
       <!-- Static image for new product -->
@@ -29,10 +30,10 @@
             placeholder="Stock Quantity" />
         </div>
 
+        <!-- Create Product Button-->
         <button @click="createProduct" class="create-btn">Create Product</button>
       </div>
     </div>
-
     <ActionBar />
   </div>
 </template>

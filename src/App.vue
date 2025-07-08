@@ -3,7 +3,7 @@
 
     <!-- Background & Footer -->
     <Background />
-    <Footer />
+    <AppFooter />
 
     <!-- Logo -->
     <div class="logo-container">
@@ -28,41 +28,45 @@
 import Background from './components/common/Background.vue'
 import Footer from './components/common/Footer.vue'
 import checkDynamicContent from '@/utils/sarraaCheck.js'
+import useUserStore from "@/store/userStore.js"
 
 export default {
   name: "App",
   components: {
     Background,
-    // eslint-disable-next-line vue/no-reserved-component-names
-    Footer
+    AppFooter: Footer
   },
   data() {
     return {
       logoMoved: false,
       showTitle: false,
-      contentScaled: false,
+      contentScaled: false
+    }
+  },
+  computed: {
+    userStore() {
+      return useUserStore()
     }
   },
   watch: {
     $route(to) {
-      this.logoMoved = to.path !== '/login';
-      this.contentScaled = to.path !== '/login';
-      this.showTitle = to.path !== '/login';
-
-      // New SARRAA URL XSS check
-      this.checkUrlForXSS(to.fullPath);
+      this.updateUiStates(to);
+      this.performSarraaCheckOnUrl(to.fullPath);
+      console.log("route changes")
     }
   },
   mounted() {
-    this.logoMoved = this.$route.path !== '/login';
-    this.contentScaled = this.$route.path !== '/login';
-    this.showTitle = this.$route.path !== '/login';
-
-    // Check URL on initial load
-    this.checkUrlForXSS(this.$route.fullPath);
+    this.updateUiStates(this.$route);
+    this.performSarraaCheckOnUrl(this.$route.fullPath);
   },
   methods: {
-    async checkUrlForXSS(url) {
+    // perform sarraa check on URL enter, redirect or reload
+    async performSarraaCheckOnUrl(url) {
+      if (!this.userStore.useSarraaCheck) {
+        console.log('SARRAA disabled, skipping URL XSS check.');
+        return;
+      }
+
       try {
         const prediction = await checkDynamicContent(url);
         if (prediction === 'malicious') {
@@ -72,9 +76,16 @@ export default {
       } catch (error) {
         console.error('URL security check failed:', error);
       }
+    },
+    updateUiStates(to) {
+      const isLogin = to.path === '/login';
+      this.logoMoved = !isLogin;
+      this.contentScaled = !isLogin;
+      this.showTitle = !isLogin;
     }
   }
 }
+
 </script>
 
 <style>

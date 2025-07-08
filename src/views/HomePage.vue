@@ -1,5 +1,7 @@
 <template>
+  <!-- Home Page -->
   <div class="home-container">
+
     <!-- Nav Bar Content -->
     <div class="navBar">
       <NavBar ref="navbar" @search="handleSearch" />
@@ -29,6 +31,7 @@ import NavBar from '@/components/common/NavBar.vue'
 import useUserStore from '@/store/userStore'
 import checkDynamicContent from '@/utils/sarraaCheck.js'
 
+// Filler Images
 import PhoneImg from '@/assets/product_img/Phone.png'
 import LaptopImg from '@/assets/product_img/Laptop.png'
 import HeadphonesImg from '@/assets/product_img/Headphones.png'
@@ -40,11 +43,11 @@ import GiftCardImg from '@/assets/product_img/GiftCard.png'
 import NewProductImg from '@/assets/product_img/NewProduct.png'
 
 export default {
+  name: "HomePage",
   components: {
     SlotComponent: SlotComp,
     NavBar,
   },
-  name: "HomePage",
   data() {
     return {
       loading: true,
@@ -102,11 +105,18 @@ export default {
       }
     },
     async handleSearch(query) {
+      if (!this.userStore.useSarraaCheck) {
+        console.log('SARRAA disabled, skipping check on search field.')
+        this.searchQuery = query
+        return
+      }
+
       if (query.trim() === '') {
         this.clearSearch()
         return
       }
 
+      // perform Sarraa check on search content change
       try {
         const prediction = await checkDynamicContent(query)
         console.log(`SARRAA prediction for search query: ${prediction}`)

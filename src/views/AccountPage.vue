@@ -1,9 +1,10 @@
 <template>
+  <!-- Account Page-->
   <h1 class="title">Manage Your Account</h1>
-
   <div class="form-card">
     <div class="form-content">
       <div class="form-grid">
+
         <!-- Single rows with label + input aligned -->
         <div class="form-row">
           <label>Username</label>
@@ -91,6 +92,7 @@
       </div>
     </div>
 
+    <!-- Save Button -->
     <div class="form-footer">
       <button :disabled="!canSubmit" @click="saveChanges">Save Changes</button>
     </div>
@@ -105,10 +107,10 @@ import useUserStore from '@/store/userStore.js'
 import ActionBar from '@/components/common/ActionBar.vue';
 
 export default {
+  name: "AccountPage",
   components: {
     ActionBar
   },
-  name: "AccountPage",
   data() {
     return {
       profile: {
@@ -127,6 +129,43 @@ export default {
       },
       originalProfile: null,
     };
+  },
+  mounted() {
+    const userStore = useUserStore();
+    const username = userStore.username;
+
+    axios.get(`http://localhost:5002/api/user/profile/data/${username}`)
+      .then(response => {
+        this.profile = response.data;
+
+        // DOB Fix
+        if (this.profile.date_of_birth) {
+          this.profile.date_of_birth = this.profile.date_of_birth.slice(0, 10);
+        }
+
+        this.originalProfile = JSON.parse(JSON.stringify(this.profile));
+      })
+      .catch(error => {
+        console.log("Could not load User Data ", error);
+      });
+  },
+  computed: {
+    isFormValid() {
+      return (
+        this.isValidEmail(this.profile.email) &&
+        this.isValidDate(this.profile.date_of_birth) &&
+        this.isValidPhone(this.profile.phone_number) &&
+        this.isValidCard(this.profile.credit_card_number) &&
+        this.isValidAmount(this.profile.wallet_amount) &&
+        this.isValidWalletPassword(this.profile.wallet_password)
+      );
+    },
+    hasChanges() {
+      return JSON.stringify(this.profile) !== JSON.stringify(this.originalProfile);
+    },
+    canSubmit() {
+      return this.isFormValid && this.hasChanges;
+    }
   },
   methods: {
     isValidEmail(email) {
@@ -170,43 +209,6 @@ export default {
       }
     }
   },
-  computed: {
-    isFormValid() {
-      return (
-        this.isValidEmail(this.profile.email) &&
-        this.isValidDate(this.profile.date_of_birth) &&
-        this.isValidPhone(this.profile.phone_number) &&
-        this.isValidCard(this.profile.credit_card_number) &&
-        this.isValidAmount(this.profile.wallet_amount) &&
-        this.isValidWalletPassword(this.profile.wallet_password)
-      );
-    },
-    hasChanges() {
-      return JSON.stringify(this.profile) !== JSON.stringify(this.originalProfile);
-    },
-    canSubmit() {
-      return this.isFormValid && this.hasChanges;
-    }
-  },
-  mounted() {
-    const userStore = useUserStore();
-    const username = userStore.username;
-
-    axios.get(`http://localhost:5002/api/user/profile/data/${username}`)
-      .then(response => {
-        this.profile = response.data;
-
-        // DOB Fix
-        if (this.profile.date_of_birth) {
-          this.profile.date_of_birth = this.profile.date_of_birth.slice(0, 10);
-        }
-
-        this.originalProfile = JSON.parse(JSON.stringify(this.profile));
-      })
-      .catch(error => {
-        console.log("Could not load User Data ", error);
-      });
-  }
 };
 </script>
 
