@@ -1,0 +1,53 @@
+	Strength	Progress	Elapsed	Reqs	Alerts	Status
+Analyser			00:00.390	38		
+						
+Plugin						
+Path Traversal	Medium	100	00:48.985	1665	0	Completed
+Remote File Inclusion	Medium	100	00:39.691	1010	0	Completed
+Heartbleed OpenSSL Vulnerability	Medium	100	00:00.130	3	0	Completed
+Source Code Disclosure - /WEB-INF Folder	Medium	100	00:00.926	7	0	Completed
+Source Code Disclosure - CVE-2012-1823	Medium	100	00:05.122	2	0	Completed
+Remote Code Execution - CVE-2012-1823	Medium	100	01:46.264	142	0	Completed
+External Redirect	Medium	100	08:28.108	432	0	Completed
+Server Side Include	Medium	100	00:15.542	404	0	Completed
+Cross Site Scripting (Reflected)	Medium	100	00:18.558	611	0	Completed
+Cross Site Scripting (Persistent) - Prime	Medium	100	00:07.145	101	0	Completed
+Cross Site Scripting (Persistent) - Spider	Medium	100	00:09.675	120	0	Completed
+Cross Site Scripting (Persistent)	Medium	100	00:02.498	0	0	Completed
+SQL Injection	Medium	100	01:46.737	2274	0	Completed
+SQL Injection - MySQL	Medium	100	00:16.698	1010	0	Completed
+SQL Injection - Hypersonic SQL	Medium	100	00:16.821	1010	0	Completed
+SQL Injection - Oracle	Medium	100	00:12.776	606	0	Completed
+SQL Injection - PostgreSQL	Medium	100	00:11.244	505	0	Completed
+SQL Injection - SQLite	Medium	100	00:15.703	960	0	Completed
+Cross Site Scripting (DOM Based)	Medium	100	20:43.201	21039	0	Completed
+SQL Injection - MsSQL	Medium	100	00:16.070	1010	0	Completed
+Log4Shell	Medium	100	00:00.023	0	0	Skipped, no Active Scan OAST service is selected..
+Spring4Shell	Medium	100	00:12.217	242	0	Completed
+Server Side Code Injection	Medium	100	00:15.001	808	0	Completed
+Remote OS Command Injection	Medium	100	02:45.358	3507	0	Completed
+XPath Injection	Medium	100	00:09.692	303	0	Completed
+XML External Entity Attack	Medium	100	00:01.228	0	0	Completed
+Generic Padding Oracle	Medium	100	00:01.856	0	0	Completed
+Cloud Metadata Potentially Exposed	Medium	100	00:00.100	4	0	Completed
+Server Side Template Injection	Medium	100	00:16.574	1414	0	Completed
+Server Side Template Injection (Blind)	Medium	100	00:20.777	1212	0	Completed
+Directory Browsing	Medium	100	00:11.731	120	0	Completed
+Buffer Overflow	Medium	100	00:07.273	101	0	Completed
+Format String Error	Medium	100	00:11.360	251	36	Completed
+CRLF Injection	Medium	100	00:21.052	707	0	Completed
+Parameter Tampering	Medium	100	00:54.527	553	0	Completed
+ELMAH Information Leak	Medium	100	00:00.094	1	0	Completed
+Trace.axd Information Leak	Medium	100	00:04.654	37	0	Completed
+.htaccess Information Leak	Medium	100	00:03.951	37	0	Completed
+.env Information Leak	Medium	100	00:02.548	37	0	Completed
+Spring Actuator Information Leak	Medium	100	00:00.041	2	0	Completed
+Hidden File Finder	Medium	100	00:00.501	50	4	Completed
+XSLT Injection	Medium	100	00:11.858	464	0	Completed
+GET for POST	Medium	100	00:01.168	0	0	Completed
+User Agent Fuzzer	Medium	100	00:21.448	1440	168	Completed
+Script Active Scan Rules	Medium	100	00:00.010	0	0	Skipped, no scripts enabled.
+SOAP Action Spoofing	Medium	100	00:01.154	0	0	Completed
+SOAP XML Injection	Medium	100	00:01.376	0	0	Completed
+						
+Totals			43:21.134	45640	208	

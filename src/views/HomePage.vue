@@ -72,7 +72,7 @@ export default {
   methods: {
     async loadProducts() {
       try {
-        const response = await fetch('http://localhost:5002/api/products')
+        const response = await fetch('http://192.168.0.2:5002/api/products')
         if (!response.ok) throw new Error('Failed to fetch products')
 
         const data = await response.json()

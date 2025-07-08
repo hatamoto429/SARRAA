@@ -61,7 +61,7 @@ export default {
   methods: {
     async createProduct() {
       try {
-        const response = await fetch('http://localhost:5002/api/products', {
+        const response = await fetch('http://192.168.0.2:5002/api/products', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(this.product),

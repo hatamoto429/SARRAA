@@ -57,7 +57,7 @@ export default {
   },
   mounted() {
     this.updateUiStates(this.$route);
-    this.performSarraaCheckOnUrl(this.$route.fullPath);
+    //this.performSarraaCheckOnUrl(this.$route.fullPath);
   },
   methods: {
     // perform sarraa check on URL enter, redirect or reload

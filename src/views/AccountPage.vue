@@ -134,7 +134,7 @@ export default {
     const userStore = useUserStore();
     const username = userStore.username;
 
-    axios.get(`http://localhost:5002/api/user/profile/data/${username}`)
+    axios.get(`http://192.168.0.2:5002/api/user/profile/data/${username}`)
       .then(response => {
         this.profile = response.data;
 
@@ -201,7 +201,7 @@ export default {
     async saveChanges() {
       try {
         const { username, password, ...editableFields } = this.profile;
-        await axios.put(`http://localhost:5002/api/user/profile/${username}`, editableFields);
+        await axios.put(`http://192.168.0.2:5002/api/user/profile/${username}`, editableFields);
         alert('Profile updated!');
         this.originalProfile = JSON.parse(JSON.stringify(this.profile));
       } catch (error) {

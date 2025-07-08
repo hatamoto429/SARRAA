@@ -185,7 +185,7 @@ export default {
       const userStore = useUserStore();
 
       try {
-        const response = await axios.post("http://localhost:5002/api/auth/login", {
+        const response = await axios.post("http://192.168.0.2:5002/api/auth/login", {
           username: this.currentUsername,
           password: this.currentPassword,
         });
@@ -223,7 +223,7 @@ export default {
     async handleRegister() {
       try {
 
-        await axios.post("http://localhost:5002/api/auth/register", {
+        await axios.post("http://192.168.0.2:5002/api/auth/register", {
           username: this.currentUsername,
           password: this.currentPassword,
         });

@@ -82,7 +82,7 @@ export default {
 
     try {
       const encodedName = encodeURIComponent(name)
-      const response = await fetch(`http://localhost:5002/api/products/${encodedName}`)
+      const response = await fetch(`http://192.168.0.2:5002/api/products/${encodedName}`)
 
       if (!response.ok) {
         throw new Error(`Error fetching product: ${response.statusText}`)

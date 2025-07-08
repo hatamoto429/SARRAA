@@ -21,5 +21,5 @@ app.use('/api/user', userRoutes)
 app.use('/api/products', productRoutes)
 
 app.listen(port, () => {
-  console.log(`Server running at http://localhost:${port}`)
+  console.log(`Server running at http://192.168.0.2:${port}`)
 })
