@@ -1,0 +1,18 @@
+### MANUAL REQUESTER + PAYLOAD
+
+POST /predict HTTP/1.1
+Host: 192.168.0.2:8001
+Content-Type: application/json
+Content-Length: 18
+
+
+{
+  "text": "test"
+}
+
+
+
+
+### API RESULT REQUEST
+
+curl "http://127.0.0.1:8080/JSON/core/view/messages/?baseurl=http://192.168.0.2:8001&apikey=e9qnfal2mlgfd9ungeucopplso"
