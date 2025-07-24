@@ -8,6 +8,8 @@ from sklearn.linear_model import LogisticRegression
 from sklearn.svm import SVC
 import joblib
 
+# NEWEST VERSION
+
 # CONFIG
 MODEL_DIR = "models"
 os.makedirs(MODEL_DIR, exist_ok=True)
