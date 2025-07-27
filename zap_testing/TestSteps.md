@@ -1,5 +1,6 @@
 1. Host different models via FastAPI
 
+   - CNN
    - LR
    - SVC
    - RF
