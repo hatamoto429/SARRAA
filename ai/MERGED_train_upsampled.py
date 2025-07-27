@@ -58,9 +58,9 @@ X_val = vectorizer.transform(val_texts)
 X_test = vectorizer.transform(test_texts)
 
 # === STEP 4: TRAIN MODEL ===
-#clf = RandomForestClassifier(random_state=42)
+clf = RandomForestClassifier(random_state=42)
 #clf = LogisticRegression(max_iter=1000, random_state=42)
-clf = SVC(kernel="linear", random_state=42)
+#clf = SVC(kernel="linear", random_state=42)
 clf.fit(X_train, train_labels)
 
 
@@ -75,7 +75,7 @@ print("\nTest Set Report:")
 print(classification_report(test_labels, test_pred))
 
 # === STEP 6: SAVE MODEL & VECTORIZER ===
-joblib.dump(vectorizer, os.path.join(MODEL_DIR, "SVC_M_upsample_vectorizer.joblib"))
-joblib.dump(clf, os.path.join(MODEL_DIR, "SVC_M_upsample_model.joblib"))
+joblib.dump(vectorizer, os.path.join(MODEL_DIR, "RF_M_upsample_vectorizer.joblib"))
+joblib.dump(clf, os.path.join(MODEL_DIR, "RF_M_upsample_model.joblib"))
 
 print("Model and vectorizer saved in 'models/'")

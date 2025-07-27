@@ -1,4 +1,4 @@
-(ai) PS C:\SARRAA\ai> python MERGED_train_upsampled.py
+(SARRAAA) PS C:\SARRAA\ai> python MERGED_train_upsampled.py
 Loaded balanced combined dataset: 67426 rows
 label
 0    39308
@@ -33,4 +33,3 @@ Test Set Report:
 weighted avg       0.98      0.98      0.98     13486
 
 Model and vectorizer saved in 'models/'
-(ai) PS C:\SARRAA\ai>

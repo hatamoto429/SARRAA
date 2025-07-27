@@ -1,0 +1,71 @@
+(SARRAAA) PS C:\SARRAA\ai> python MERGED_train_upsampled_cnn.py
+2025-07-24 16:15:15.414859: I tensorflow/core/util/port.cc:153] oneDNN custom operations are on. You may se
+e slightly different numerical results due to floating-point round-off errors from different computation orders. To turn them off, set the environment variable `TF_ENABLE_ONEDNN_OPTS=0`.
+2025-07-24 16:15:16.660630: I tensorflow/core/util/port.cc:153] oneDNN custom operations are on. You may se
+e slightly different numerical results due to floating-point round-off errors from different computation orders. To turn them off, set the environment variable `TF_ENABLE_ONEDNN_OPTS=0`.
+Loaded balanced combined dataset: 67426 rows
+label
+0    39308
+1    28118
+Name: count, dtype: int64
+Split sizes: Train=48546, Val=5394, Test=13486
+Class distribution in full data:
+ label
+0    0.58298
+├──────────────────────────────────────┼─────────────────────────────┼─────────────────┤
+│ dropout (Dropout)                    │ ?                           │               0 │
+├──────────────────────────────────────┼─────────────────────────────┼─────────────────┤
+│ dense (Dense)                        │ ?                           │     0 (unbuilt) │
+├──────────────────────────────────────┼─────────────────────────────┼─────────────────┤
+│ dense_1 (Dense)                      │ ?                           │     0 (unbuilt) │
+└──────────────────────────────────────┴─────────────────────────────┴─────────────────┘
+ Total params: 0 (0.00 B)
+ Trainable params: 0 (0.00 B)
+ Non-trainable params: 0 (0.00 B)
+Epoch 1/10
+1518/1518 - 28s - 19ms/step - accuracy: 0.9734 - loss: 0.0751 - val_accuracy: 0.9920 - val_loss: 0.0393
+Epoch 2/10
+1518/1518 - 28s - 18ms/step - accuracy: 0.9951 - loss: 0.0206 - val_accuracy: 0.9920 - val_loss: 0.0400
+Epoch 3/10
+1518/1518 - 26s - 17ms/step - accuracy: 0.9958 - loss: 0.0191 - val_accuracy: 0.9924 - val_loss: 0.0388
+Epoch 4/10
+1518/1518 - 26s - 17ms/step - accuracy: 0.9960 - loss: 0.0184 - val_accuracy: 0.9924 - val_loss: 0.0371
+Epoch 5/10
+1518/1518 - 26s - 17ms/step - accuracy: 0.9963 - loss: 0.0175 - val_accuracy: 0.9922 - val_loss: 0.0365
+Epoch 6/10
+1518/1518 - 26s - 17ms/step - accuracy: 0.9964 - loss: 0.0166 - val_accuracy: 0.9926 - val_loss: 0.0368
+Epoch 7/10
+1518/1518 - 26s - 17ms/step - accuracy: 0.9963 - loss: 0.0162 - val_accuracy: 0.9930 - val_loss: 0.0338
+Epoch 8/10
+1518/1518 - 26s - 17ms/step - accuracy: 0.9964 - loss: 0.0158 - val_accuracy: 0.9930 - val_loss: 0.0330
+Epoch 9/10
+1518/1518 - 26s - 17ms/step - accuracy: 0.9966 - loss: 0.0155 - val_accuracy: 0.9926 - val_loss: 0.0326
+Epoch 10/10
+1518/1518 - 26s - 17ms/step - accuracy: 0.9965 - loss: 0.0153 - val_accuracy: 0.9926 - val_loss: 0.0351
+169/169 ━━━━━━━━━━━━━━━━━━━━ 0s 2ms/step  
+422/422 ━━━━━━━━━━━━━━━━━━━━ 1s 1ms/step 
+
+Validation Set Report:
+              precision    recall  f1-score   support
+
+           0       0.99      1.00      0.99      3145
+           1       1.00      0.99      0.99      2249
+
+    accuracy                           0.99      5394
+   macro avg       0.99      0.99      0.99      5394
+weighted avg       0.99      0.99      0.99      5394
+
+
+Test Set Report:
+              precision    recall  f1-score   support
+
+           0       0.99      1.00      0.99      7862
+           1       0.99      0.99      0.99      5624
+
+    accuracy                           0.99     13486
+   macro avg       0.99      0.99      0.99     13486
+weighted avg       0.99      0.99      0.99     13486
+
+WARNING:absl:You are saving your model as an HDF5 file via `model.save()` or `keras.saving.save_model(model
+)`. This file format is considered legacy. We recommend using instead the native Keras format, e.g. `model.save('my_model.keras')` or `keras.saving.save_model(model, 'my_model.keras')`.
+CNN model and vectorizer saved successfully.
