@@ -13,8 +13,24 @@ import os
 # vectorizer = joblib.load("models/SQL_vectorizer.joblib")
 
 # MERGED VERSION
-model = joblib.load("models/MERGED_upsample_model.joblib")
-vectorizer = joblib.load("models/MERGED_upsample_vectorizer.joblib")
+# Linear Regression Model
+model = joblib.load("models/LR_M_upsample_model.joblib")
+vectorizer = joblib.load("models/LR_M_upsample_vectorizer.joblib")
+
+# Support Vector Machine Model
+#model = joblib.load("models/SVM_M_upsample_model.joblib")
+#vectorizer = joblib.load("models/SVM_M_upsample_vectorizer.joblib")
+
+# Convolutional Neural Network Model
+#model = joblib.load("models/CNN_M_upsample_model.keras")
+##model = joblib.load("models/CNN_M_upsample_model.h5")
+#vectorizer = joblib.load("models/CNN_M_upsample_vectorizer_config.json")
+
+# Random Forest TEST Model
+#model = joblib.load("models/LR_M_upsample_model.joblib")
+#vectorizer = joblib.load("models/LR_M_upsample_vectorizer.joblib")
+
+
 
 app = FastAPI()
 

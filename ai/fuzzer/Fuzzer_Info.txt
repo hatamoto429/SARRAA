@@ -1,0 +1,5 @@
+FUZZER Sqli Benign - 22305 Samples
+FUZZER Sqli Malicious - 11412 Samples
+
+FUZZER XSS Benign - 8198 Samples
+FUZZER XSS Malicious - 8207 Samples
