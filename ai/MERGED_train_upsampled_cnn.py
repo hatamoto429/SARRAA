@@ -126,11 +126,24 @@ print("\nTest Set Report:")
 print(classification_report(y_test, test_pred))
 
 # --- Save vectorizer and model ---
-# Save vectorizer weights
+
+# Save vectorizer config and weights
 vectorizer_config = {
     "config": vectorizer.get_config(),
-    "weights": vectorizer.get_weights()
+    "weights": [w.tolist() for w in vectorizer.get_weights()]
 }
+
+# --- Save vectorizer vocabulary (list of strings)
+vocab = vectorizer.get_vocabulary()
+with open(os.path.join(MODEL_DIR, "CNN_M_upsample_vectorizer_vocab.json"), "w", encoding="utf-8") as f:
+    json.dump(vocab, f)
+
+# --- Save model ---
+model.save(os.path.join(MODEL_DIR, "CNN_M_upsample_model.keras"))
+
+print("CNN model and vectorizer vocabulary saved successfully.")
+
+
 with open(os.path.join(MODEL_DIR, "CNN_M_upsample_vectorizer_config.json"), "w") as f:
     json.dump(vectorizer_config, f)
 
@@ -138,3 +151,4 @@ with open(os.path.join(MODEL_DIR, "CNN_M_upsample_vectorizer_config.json"), "w")
 model.save(os.path.join(MODEL_DIR, "CNN_M_upsample_model.keras"))
 
 print("CNN model and vectorizer saved successfully.")
+
