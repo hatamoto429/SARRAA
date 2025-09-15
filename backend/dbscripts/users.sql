@@ -5,7 +5,7 @@ USE sarraadb;
 -- Drop existing users table if needed
 DROP TABLE IF EXISTS users;
 
--- Create the users table with the updated structure (15 columns)
+-- Create the users table with the updated structure
 CREATE TABLE users (
   id INT AUTO_INCREMENT PRIMARY KEY,
   username VARCHAR(50) NOT NULL,

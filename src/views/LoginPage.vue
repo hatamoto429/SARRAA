@@ -111,8 +111,6 @@ export default {
       this.isLoginMode = isLogin;
     },
 
-    // OPTIONAL: EXTRACT HANDLE AUTH TO FRONTEND UTILS
-
     // perform sarraa check on authentication initialization
     async performSarraaCheckAndAuth() {
       /* Additional Vulnerability

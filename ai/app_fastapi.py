@@ -4,7 +4,7 @@ from keras.src.layers import TextVectorization
 from pydantic import BaseModel
 import os
 import joblib
-from keras.models import load_model
+#from keras.models import load_model
 import json
 import tensorflow as tf
 
@@ -24,27 +24,27 @@ import tensorflow as tf
 
 # MERGED VERSIONS --------------------------------
 # Linear Regression Model ---
-# model = joblib.load("models/LR_M_upsample_model.joblib")
-# vectorizer = joblib.load("models/LR_M_upsample_vectorizer.joblib")
+model = joblib.load("models/LR_M_upsample_model.joblib")
+vectorizer = joblib.load("models/LR_M_upsample_vectorizer.joblib")
 
 # Support Vector Machine Model ---
 # model = joblib.load("models/SVM_M_upsample_model.joblib")
 # vectorizer = joblib.load("models/SVM_M_upsample_vectorizer.joblib")
 
 # Convolutional Neural Network Model ---
-model = load_model("models/CNN_M_upsample_model.keras")
+#model = load_model("models/CNN_M_upsample_model.keras")
 
 # Load vectorizer config -
-with open("models/CNN_M_upsample_vectorizer_config.json", "r") as f:
-    vec_data = json.load(f)
+#with open("models/CNN_M_upsample_vectorizer_config.json", "r") as f:
+#    vec_data = json.load(f)
 
-vectorizer = TextVectorization.from_config(vec_data["config"])
+#vectorizer = TextVectorization.from_config(vec_data["config"])
 
 # Load vocabulary -
-with open("models/CNN_M_upsample_vectorizer_vocab.json", "r", encoding="utf-8") as f:
-    vocab = json.load(f)
+#with open("models/CNN_M_upsample_vectorizer_vocab.json", "r", encoding="utf-8") as f:
+#    vocab = json.load(f)
 
-vectorizer.set_vocabulary(vocab)
+#vectorizer.set_vocabulary(vocab)
 # -----------------------------------------------
 
 app = FastAPI()
@@ -68,34 +68,34 @@ def read_root():
     return {"message": "SARRAA API is running"}
 
 # Predict with LR, SVC -----------------------------------------
-#@app.post("/predict")
-#def predict(input_data: InputText):
-#    raw_text = input_data.text
-#    features = vectorizer.transform([raw_text])
-#    prediction = model.predict(features)[0]
-#    label = "malicious" if prediction == 1 else "benign"
-#    return {
-#        "input": raw_text,
-#        "prediction": label,
-#        "class": int(prediction)
-#    }
-# -----------------------------------------
-
-
-# Predict with CNN -----------------------------------------
 @app.post("/predict")
 def predict(input_data: InputText):
     raw_text = input_data.text
-    # Use TextVectorization layer to transform input text
-    features = vectorizer(tf.constant([raw_text]))
-    prediction_prob = model.predict(features)
-    prediction = (prediction_prob > 0.5).astype(int)[0][0]
+    features = vectorizer.transform([raw_text])
+    prediction = model.predict(features)[0]
     label = "malicious" if prediction == 1 else "benign"
     return {
         "input": raw_text,
         "prediction": label,
         "class": int(prediction)
     }
+# -----------------------------------------
+
+
+# Predict with CNN -----------------------------------------
+#@app.post("/predict")
+#def predict(input_data: InputText):
+#    raw_text = input_data.text
+#    # Use TextVectorization layer to transform input text
+#    features = vectorizer(tf.constant([raw_text]))
+#    prediction_prob = model.predict(features)
+#    prediction = (prediction_prob > 0.5).astype(int)[0][0]
+#    label = "malicious" if prediction == 1 else "benign"
+#    return {
+#        "input": raw_text,
+#        "prediction": label,
+#        "class": int(prediction)
+#    }
 # -----------------------------------------
 
 # VM Pentesting hosting

@@ -34,7 +34,7 @@ train_texts, val_texts, train_labels, val_labels = train_test_split(
     train_val_texts, train_val_labels, test_size=0.1, random_state=42, stratify=train_val_labels
 )
 
-print(f"📊 Split sizes: Train={len(train_texts)}, Val={len(val_texts)}, Test={len(test_texts)}")
+print(f"Split sizes: Train={len(train_texts)}, Val={len(val_texts)}, Test={len(test_texts)}")
 
 # === STEP 3: FEATURE EXTRACTION ===
 vectorizer = TfidfVectorizer(
@@ -56,10 +56,10 @@ clf.fit(X_train, train_labels)
 val_pred = clf.predict(X_val)
 test_pred = clf.predict(X_test)
 
-print("\n🧪 Validation Set Report:")
+print("\n Validation Set Report:")
 print(classification_report(val_labels, val_pred))
 
-print("\n🧪 Test Set Report:")
+print("\n Test Set Report:")
 print(classification_report(test_labels, test_pred))
 
 # === STEP 6: SAVE MODEL & VECTORIZER ===
